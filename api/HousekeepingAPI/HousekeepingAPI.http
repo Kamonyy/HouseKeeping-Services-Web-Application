@@ -1,0 +1,6 @@
+@HousekeepingAPI_HostAddress = http://localhost:5146
+
+GET {{HousekeepingAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
