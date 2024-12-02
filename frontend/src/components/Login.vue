@@ -47,14 +47,14 @@
 <template>
 	<form @submit.prevent="login">
 		<div class="form-group">
-			<label for="username">Username:</label>
+			<label for="username">اسم المسنخدم:</label>
 			<input type="text" id="username" v-model="username" required />
 		</div>
 		<div class="form-group">
-			<label for="password">Password:</label>
+			<label for="password">كلمة المرور:</label>
 			<input type="password" id="password" v-model="password" required />
 		</div>
-		<button type="submit">Login</button>
+		<button type="submit">تسجيل دخول</button>
 		<button type="button" @click="logout" v-if="isLoggedIn">Logout</button>
 		<div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
 	</form>
@@ -82,6 +82,7 @@
 	}
 
 	input {
+		color: rgb(61, 61, 61);
 		width: 100%;
 		padding: 10px;
 		border: 1px solid #ccc;

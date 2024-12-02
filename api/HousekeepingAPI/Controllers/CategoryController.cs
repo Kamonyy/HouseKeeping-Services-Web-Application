@@ -16,7 +16,6 @@ namespace HousekeepingAPI.Controllers
         {
             _CategoryRepository = CategoryRepository;
         }
-        [Authorize]
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Category>))]
         public IActionResult GetAll() 

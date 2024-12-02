@@ -251,3 +251,4 @@ d:\HouseKeeping\api\HousekeepingAPI\bin\Debug\net8.0\HousekeepingAPI.staticwebas
 d:\HouseKeeping\api\HousekeepingAPI\obj\Debug\net8.0\HousekeepingAPI.sourcelink.json
 d:\HouseKeeping\api\HousekeepingAPI\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 d:\HouseKeeping\api\HousekeepingAPI\obj\Debug\net8.0\staticwebassets\msbuild.HousekeepingAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+D:\HouseKeeping\api\HousekeepingAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
