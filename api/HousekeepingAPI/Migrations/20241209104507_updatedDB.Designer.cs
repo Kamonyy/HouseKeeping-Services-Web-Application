@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HousekeepingAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241111165656_fix")]
-    partial class fix
+    [Migration("20241209104507_updatedDB")]
+    partial class updatedDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,9 +114,6 @@ namespace HousekeepingAPI.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -127,11 +124,46 @@ namespace HousekeepingAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Services");
+                });
+
+            modelBuilder.Entity("HousekeepingAPI.Models.ServiceSubCategory", b =>
+                {
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ServiceId", "SubCategoryId");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("ServiceSubCategories");
+                });
+
+            modelBuilder.Entity("HousekeepingAPI.Models.SubCategory", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -162,13 +194,19 @@ namespace HousekeepingAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6525ab60-fb43-4f36-816d-b0f972749e48",
+                            Id = "bde53ba0-772e-4b58-8870-84e46c4e3c3d",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "7137340c-05d8-43e0-9934-b2bd2125ed16",
+                            Id = "b65918c5-c4f2-413f-9647-ee7fd8717b46",
+                            Name = "Provider",
+                            NormalizedName = "PROVIDER"
+                        },
+                        new
+                        {
+                            Id = "b14dfa03-2767-41eb-b736-5d4a2bd0e96a",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -282,21 +320,43 @@ namespace HousekeepingAPI.Migrations
 
             modelBuilder.Entity("HousekeepingAPI.Models.Service", b =>
                 {
-                    b.HasOne("HousekeepingAPI.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HousekeepingAPI.Models.AppUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HousekeepingAPI.Models.ServiceSubCategory", b =>
+                {
+                    b.HasOne("HousekeepingAPI.Models.Service", "Service")
+                        .WithMany("ServiceSubCategory")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HousekeepingAPI.Models.SubCategory", "SubCategory")
+                        .WithMany("ServiceSubCategory")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+
+                    b.Navigation("SubCategory");
+                });
+
+            modelBuilder.Entity("HousekeepingAPI.Models.SubCategory", b =>
+                {
+                    b.HasOne("HousekeepingAPI.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -348,6 +408,16 @@ namespace HousekeepingAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HousekeepingAPI.Models.Service", b =>
+                {
+                    b.Navigation("ServiceSubCategory");
+                });
+
+            modelBuilder.Entity("HousekeepingAPI.Models.SubCategory", b =>
+                {
+                    b.Navigation("ServiceSubCategory");
                 });
 #pragma warning restore 612, 618
         }

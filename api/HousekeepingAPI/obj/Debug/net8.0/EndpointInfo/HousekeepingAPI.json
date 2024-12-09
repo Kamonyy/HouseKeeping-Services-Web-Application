@@ -222,6 +222,41 @@
           }
         }
       }
+    },
+    "/api/subCategory": {
+      "get": {
+        "tags": [
+          "SubCategory"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/subCategory/{categoryId}": {
+      "get": {
+        "tags": [
+          "SubCategory"
+        ],
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -360,8 +395,53 @@
             "type": "string",
             "nullable": true
           },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
           "user": {
             "$ref": "#/components/schemas/AppUser"
+          },
+          "serviceSubCategory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceSubCategory"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ServiceSubCategory": {
+        "type": "object",
+        "properties": {
+          "serviceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "service": {
+            "$ref": "#/components/schemas/Service"
+          },
+          "subCategoryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "subCategory": {
+            "$ref": "#/components/schemas/SubCategory"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SubCategory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
           },
           "categoryId": {
             "type": "integer",
@@ -369,6 +449,13 @@
           },
           "category": {
             "$ref": "#/components/schemas/Category"
+          },
+          "serviceSubCategory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceSubCategory"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

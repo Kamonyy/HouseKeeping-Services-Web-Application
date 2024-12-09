@@ -38,6 +38,7 @@ namespace HousekeepingAPI.Controllers
 
             if (!ModelState.IsValid)
                 return BadRequest();
+
             return Ok(categories);
         }
 

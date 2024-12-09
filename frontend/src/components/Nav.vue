@@ -30,7 +30,7 @@
 
 		<!-- Navigation Links -->
 		<div class="flex items-center space-x-6 rtl:space-x-reverse">
-			<RouterLink to="#" class="hover:text-blue-500">مساعدة</RouterLink>
+			<RouterLink to="/help" class="hover:text-blue-500">مساعدة</RouterLink>
 			<RouterLink
 				@click="handleLogout"
 				to="/login"

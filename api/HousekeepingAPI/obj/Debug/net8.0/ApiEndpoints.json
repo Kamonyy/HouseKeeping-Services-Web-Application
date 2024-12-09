@@ -122,5 +122,31 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "HousekeepingAPI.Controllers.SubCategoryController",
+    "Method": "GetAll",
+    "RelativePath": "api/subCategory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HousekeepingAPI.Controllers.SubCategoryController",
+    "Method": "GetAllByCategory",
+    "RelativePath": "api/subCategory/{categoryId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

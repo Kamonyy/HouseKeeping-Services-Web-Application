@@ -26,3 +26,13 @@
 		</div>
 	</RouterLink>
 </template>
+
+<style>
+	p {
+		color: rgb(45, 129, 66);
+	}
+
+	p {
+		color: rgb(45, 129, 66);
+	}
+</style>

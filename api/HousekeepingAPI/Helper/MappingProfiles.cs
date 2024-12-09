@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HousekeepingAPI.Dto;
+using HousekeepingAPI.Dto.SubCategory;
 using HousekeepingAPI.Models;
 
 namespace HousekeepingAPI.Helper
@@ -9,6 +10,9 @@ namespace HousekeepingAPI.Helper
         public MappingProfiles() 
         {
             CreateMap<Models.Service, ServiceDto>();
+            CreateMap<SubCategory, SubCategoryDto>()
+                .ForMember(dto => dto.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
+
         }
     }
 }
