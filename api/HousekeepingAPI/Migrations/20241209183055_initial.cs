@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HousekeepingAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class updatedDB : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -221,7 +221,11 @@ namespace HousekeepingAPI.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    Username = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -231,8 +235,7 @@ namespace HousekeepingAPI.Migrations
                         name: "FK_Services_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -288,9 +291,9 @@ namespace HousekeepingAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "b14dfa03-2767-41eb-b736-5d4a2bd0e96a", null, "User", "USER" },
-                    { "b65918c5-c4f2-413f-9647-ee7fd8717b46", null, "Provider", "PROVIDER" },
-                    { "bde53ba0-772e-4b58-8870-84e46c4e3c3d", null, "Admin", "ADMIN" }
+                    { "5a2fa505-4018-4ce8-a53f-1ce164a77b7d", null, "User", "USER" },
+                    { "5db66f03-004b-42d8-ac79-81b425a2945a", null, "Admin", "ADMIN" },
+                    { "6aed2340-7303-41e3-a716-19e6cc6e6542", null, "Provider", "PROVIDER" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -9,7 +9,6 @@ namespace HousekeepingAPI.Data
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
-        public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Models.Service> Services { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
@@ -19,9 +18,22 @@ namespace HousekeepingAPI.Data
         {
 
             base.OnModelCreating(modelBuilder);
+             
+            modelBuilder.Entity<ServiceSubCategory>()
+                .HasKey(ssc => new { ssc.ServiceId, ssc.SubCategoryId });
 
-            List<IdentityRole> roles = new List<IdentityRole>
-            {
+            modelBuilder.Entity<ServiceSubCategory>()
+                .HasOne(ssc => ssc.Service)
+                .WithMany(ssc => ssc.ServiceSubCategory)
+                .HasForeignKey(s => s.ServiceId);
+
+            modelBuilder.Entity<ServiceSubCategory>()
+                .HasOne(ssc => ssc.SubCategory)
+                .WithMany(ssc => ssc.ServiceSubCategory)
+                .HasForeignKey(s => s.SubCategoryId);
+
+            List<IdentityRole> roles =
+            [
                 new IdentityRole
                 {
                     Name = "Admin",
@@ -37,22 +49,9 @@ namespace HousekeepingAPI.Data
                     Name = "User",
                     NormalizedName = "USER"
                 },
-            };
+            ];
             modelBuilder.Entity<IdentityRole>().HasData(roles);
 
-
-            modelBuilder.Entity<ServiceSubCategory>()
-                .HasKey(ssc => new { ssc.ServiceId, ssc.SubCategoryId });
-
-            modelBuilder.Entity<ServiceSubCategory>()
-                .HasOne(ssc => ssc.Service)
-                .WithMany(s => s.ServiceSubCategory)
-                .HasForeignKey(ssc => ssc.ServiceId);
-
-            modelBuilder.Entity<ServiceSubCategory>()
-                .HasOne(ssc => ssc.SubCategory)
-                .WithMany(sc => sc.ServiceSubCategory)
-                .HasForeignKey(ssc => ssc.SubCategoryId);
         }
     }
 }

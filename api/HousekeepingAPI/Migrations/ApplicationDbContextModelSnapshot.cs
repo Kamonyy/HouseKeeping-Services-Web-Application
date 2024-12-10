@@ -119,13 +119,11 @@ namespace HousekeepingAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Services");
                 });
@@ -195,19 +193,19 @@ namespace HousekeepingAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "9832279a-b76f-42a9-ae4a-dca70ddbbb99",
+                            Id = "2294ec4f-c34b-4ebb-a4a7-b3c4dc629353",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "69289cab-16a8-4031-b720-dfcf5e06241e",
+                            Id = "f7f5597c-da45-4bf6-964e-2e05ad15f69d",
                             Name = "Provider",
                             NormalizedName = "PROVIDER"
                         },
                         new
                         {
-                            Id = "8daf3f3d-d0a1-4f03-9399-4b7956953d05",
+                            Id = "185cbe1a-ffd5-4a96-bf88-0fff1c5aeb4e",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -317,17 +315,6 @@ namespace HousekeepingAPI.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("HousekeepingAPI.Models.Service", b =>
-                {
-                    b.HasOne("HousekeepingAPI.Models.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("HousekeepingAPI.Models.ServiceSubCategory", b =>

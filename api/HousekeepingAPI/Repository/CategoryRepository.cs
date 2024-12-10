@@ -1,6 +1,7 @@
 ﻿using HousekeepingAPI.Data;
 using HousekeepingAPI.Interfaces;
 using HousekeepingAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HousekeepingAPI.Repository
 {
@@ -13,14 +14,14 @@ namespace HousekeepingAPI.Repository
             _context = context;
         }
 
-        public ICollection<Category> GetAll()
+        public async Task<ICollection<Category>> GetAllAsync()
         {
-            return _context.Categories.OrderBy(c => c.Id).ToList();
+            return await _context.Categories.OrderBy(c => c.Id).ToListAsync();
         }
 
-        public Category GetById(int id)
+        public async Task<Category?> GetByIdAsync(int id)
         {
-            return _context.Categories.Where(c => c.Id == id).FirstOrDefault()!;
+            return await _context.Categories.FindAsync(id);
         }
     }
 }

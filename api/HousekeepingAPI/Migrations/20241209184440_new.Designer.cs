@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HousekeepingAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241209104507_updatedDB")]
-    partial class updatedDB
+    [Migration("20241209184440_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,17 +114,19 @@ namespace HousekeepingAPI.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Services");
                 });
@@ -194,19 +196,19 @@ namespace HousekeepingAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "bde53ba0-772e-4b58-8870-84e46c4e3c3d",
+                            Id = "2294ec4f-c34b-4ebb-a4a7-b3c4dc629353",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "b65918c5-c4f2-413f-9647-ee7fd8717b46",
+                            Id = "f7f5597c-da45-4bf6-964e-2e05ad15f69d",
                             Name = "Provider",
                             NormalizedName = "PROVIDER"
                         },
                         new
                         {
-                            Id = "b14dfa03-2767-41eb-b736-5d4a2bd0e96a",
+                            Id = "185cbe1a-ffd5-4a96-bf88-0fff1c5aeb4e",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -316,17 +318,6 @@ namespace HousekeepingAPI.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("HousekeepingAPI.Models.Service", b =>
-                {
-                    b.HasOne("HousekeepingAPI.Models.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("HousekeepingAPI.Models.ServiceSubCategory", b =>

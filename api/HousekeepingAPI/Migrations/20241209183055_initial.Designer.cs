@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HousekeepingAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241209120920_ServicedUpdated")]
-    partial class ServicedUpdated
+    [Migration("20241209183055_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,8 +123,11 @@ namespace HousekeepingAPI.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -198,19 +201,19 @@ namespace HousekeepingAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "9832279a-b76f-42a9-ae4a-dca70ddbbb99",
+                            Id = "5db66f03-004b-42d8-ac79-81b425a2945a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "69289cab-16a8-4031-b720-dfcf5e06241e",
+                            Id = "6aed2340-7303-41e3-a716-19e6cc6e6542",
                             Name = "Provider",
                             NormalizedName = "PROVIDER"
                         },
                         new
                         {
-                            Id = "8daf3f3d-d0a1-4f03-9399-4b7956953d05",
+                            Id = "5a2fa505-4018-4ce8-a53f-1ce164a77b7d",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -326,9 +329,7 @@ namespace HousekeepingAPI.Migrations
                 {
                     b.HasOne("HousekeepingAPI.Models.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });

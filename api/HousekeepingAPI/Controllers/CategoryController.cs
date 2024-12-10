@@ -16,22 +16,24 @@ namespace HousekeepingAPI.Controllers
         {
             _CategoryRepository = CategoryRepository;
         }
+
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Category>))]
-        public IActionResult GetAll() 
+        public async Task<IActionResult> GetAll() 
         {
-            var categories = _CategoryRepository.GetAll();
+            var categories = await _CategoryRepository.GetAllAsync();
 
             if (!ModelState.IsValid)
                 return BadRequest();
+
             return Ok(categories);
         }
 
         [HttpGet("{CategoryId}")]
         [ProducesResponseType(200, Type = typeof(Category))]
-        public IActionResult GetCategory(int CategoryId)
+        public async Task<IActionResult> GetCategory(int CategoryId)
         {
-            var categories = _CategoryRepository.GetById(CategoryId);
+            var categories = await _CategoryRepository.GetByIdAsync(CategoryId);
 
             if (categories == null)
                 return NotFound();

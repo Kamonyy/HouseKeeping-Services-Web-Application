@@ -1,5 +1,7 @@
 ﻿using HousekeepingAPI.Data;
 using HousekeepingAPI.Interfaces;
+using HousekeepingAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HousekeepingAPI.Repository
 {
@@ -12,14 +14,49 @@ namespace HousekeepingAPI.Repository
             _context = context;
         }
 
-        public ICollection<Models.Service> GetAll()
+        public async Task<ICollection<Models.Service>> GetAllAsync()
         {
-            return _context.Services.OrderBy(s => s.Id).ToList();
+            return await _context.Services
+                .Include(s => s.ServiceSubCategory)
+                .ThenInclude(sc => sc.SubCategory)
+                .ToListAsync();
         }
 
-        public Models.Service GetById(int id)
+        public async Task<Models.Service?> GetByIdAsync(int id)
         {
-            return _context.Services.Where(s => s.Id == id).FirstOrDefault()!;
+            return await _context.Services
+                .Include(s => s.ServiceSubCategory)
+                .ThenInclude(sc => sc.SubCategory)
+                .FirstOrDefaultAsync(s => s.Id == id);
+        }
+
+        public async Task<List<ServiceSubCategory>> CreateAsync(Models.Service service, List<int> subCategoryIds)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                await _context.Services.AddAsync(service);
+                await _context.SaveChangesAsync();
+
+                var serviceSubCategories = subCategoryIds.Select(subCategoryId => new ServiceSubCategory
+                {
+                    ServiceId = service.Id,
+                    SubCategoryId = subCategoryId,
+                }).ToList();
+
+                await _context.ServiceSubCategories.AddRangeAsync(serviceSubCategories);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                return serviceSubCategories;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+
         }
     }
 }
