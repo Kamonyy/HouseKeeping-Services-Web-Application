@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HousekeepingAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241209184440_new")]
-    partial class @new
+    [Migration("20241231040845_s")]
+    partial class s
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -196,19 +196,19 @@ namespace HousekeepingAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2294ec4f-c34b-4ebb-a4a7-b3c4dc629353",
+                            Id = "5affe056-7ef4-41e5-84c4-929b04fd2175",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "f7f5597c-da45-4bf6-964e-2e05ad15f69d",
+                            Id = "b7d107e7-7cf3-4195-9b0b-5cf0d2ecbc16",
                             Name = "Provider",
                             NormalizedName = "PROVIDER"
                         },
                         new
                         {
-                            Id = "185cbe1a-ffd5-4a96-bf88-0fff1c5aeb4e",
+                            Id = "f4b1caba-a489-4dd8-ae59-9968ceeba059",
                             Name = "User",
                             NormalizedName = "USER"
                         });

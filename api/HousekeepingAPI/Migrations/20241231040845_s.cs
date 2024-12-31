@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HousekeepingAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class s : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -83,6 +83,25 @@ namespace HousekeepingAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Services",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Title = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Username = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Services", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -214,32 +233,6 @@ namespace HousekeepingAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Services",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Username = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Services", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Services_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "SubCategories",
                 columns: table => new
                 {
@@ -291,9 +284,9 @@ namespace HousekeepingAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "5a2fa505-4018-4ce8-a53f-1ce164a77b7d", null, "User", "USER" },
-                    { "5db66f03-004b-42d8-ac79-81b425a2945a", null, "Admin", "ADMIN" },
-                    { "6aed2340-7303-41e3-a716-19e6cc6e6542", null, "Provider", "PROVIDER" }
+                    { "5affe056-7ef4-41e5-84c4-929b04fd2175", null, "Admin", "ADMIN" },
+                    { "b7d107e7-7cf3-4195-9b0b-5cf0d2ecbc16", null, "Provider", "PROVIDER" },
+                    { "f4b1caba-a489-4dd8-ae59-9968ceeba059", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -334,11 +327,6 @@ namespace HousekeepingAPI.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Services_UserId",
-                table: "Services",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ServiceSubCategories_SubCategoryId",
                 table: "ServiceSubCategories",
                 column: "SubCategoryId");
@@ -374,13 +362,13 @@ namespace HousekeepingAPI.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
                 name: "Services");
 
             migrationBuilder.DropTable(
                 name: "SubCategories");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Categories");
