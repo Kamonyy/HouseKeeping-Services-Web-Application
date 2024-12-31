@@ -12,9 +12,9 @@ using System;
 using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("HousekeepingAPI")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4590f8e824d1518c0f5a764db03bd5ff80aeefc9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1fc9cee14c89b91dea5e73915c80a4d74b75d8a8")]
 [assembly: System.Reflection.AssemblyProductAttribute("HousekeepingAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HousekeepingAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

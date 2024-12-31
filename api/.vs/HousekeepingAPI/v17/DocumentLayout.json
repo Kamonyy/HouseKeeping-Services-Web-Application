@@ -1,17 +1,25 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\HouseKeeping\\api\\",
+  "WorkspaceRootPath": "D:\\git\\HouseKeeping\\api\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\git\\HouseKeeping\\api\\HousekeepingAPI\\Migrations\\20241231040845_s.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:HousekeepingAPI\\Migrations\\20241231040845_s.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\git\\HouseKeeping\\api\\HousekeepingAPI\\Migrations\\20241231040703_s.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:HousekeepingAPI\\Migrations\\20241231040703_s.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\git\\housekeeping\\api\\housekeepingapi\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\repository\\servicerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\git\\housekeeping\\api\\housekeepingapi\\repository\\servicerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\repository\\servicerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\controllers\\servicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\git\\housekeeping\\api\\housekeepingapi\\controllers\\servicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\controllers\\servicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -22,51 +30,69 @@
       "DocumentGroups": [
         {
           "DockedWidth": 302,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ServiceController.cs",
-              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\ServiceController.cs",
-              "RelativeDocumentMoniker": "HousekeepingAPI\\Controllers\\ServiceController.cs",
-              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\ServiceController.cs",
-              "RelativeToolTip": "HousekeepingAPI\\Controllers\\ServiceController.cs",
-              "ViewState": "AgIAADEAAAAAAAAAAADgvz0AAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "20241231040845_s.cs",
+              "DocumentMoniker": "D:\\git\\HouseKeeping\\api\\HousekeepingAPI\\Migrations\\20241231040845_s.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Migrations\\20241231040845_s.cs",
+              "ToolTip": "D:\\git\\HouseKeeping\\api\\HousekeepingAPI\\Migrations\\20241231040845_s.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Migrations\\20241231040845_s.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-09T15:29:40.573Z",
-              "IsPinned": true,
+              "WhenOpened": "2024-12-31T04:08:46.226Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ServiceRepository.cs",
-              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Repository\\ServiceRepository.cs",
-              "RelativeDocumentMoniker": "HousekeepingAPI\\Repository\\ServiceRepository.cs",
-              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Repository\\ServiceRepository.cs",
-              "RelativeToolTip": "HousekeepingAPI\\Repository\\ServiceRepository.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAowCoAAAARAAAAAAAAAA==",
+              "Title": "20241231040703_s.cs",
+              "DocumentMoniker": "D:\\git\\HouseKeeping\\api\\HousekeepingAPI\\Migrations\\20241231040703_s.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Migrations\\20241231040703_s.cs",
+              "ToolTip": "D:\\git\\HouseKeeping\\api\\HousekeepingAPI\\Migrations\\20241231040703_s.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Migrations\\20241231040703_s.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-09T16:57:51.878Z",
-              "IsPinned": true,
+              "WhenOpened": "2024-12-31T04:07:04.127Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ServiceController.cs",
+              "DocumentMoniker": "D:\\git\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\ServiceController.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Controllers\\ServiceController.cs",
+              "ToolTip": "D:\\git\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\ServiceController.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Controllers\\ServiceController.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAADgvz0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-31T04:05:39.831Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ApplicationDbContext.cs",
-              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Data\\ApplicationDbContext.cs",
-              "RelativeDocumentMoniker": "HousekeepingAPI\\Data\\ApplicationDbContext.cs",
-              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Data\\ApplicationDbContext.cs",
-              "RelativeToolTip": "HousekeepingAPI\\Data\\ApplicationDbContext.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAcwBgAAAA1AAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "ServiceRepository.cs",
+              "DocumentMoniker": "D:\\git\\HouseKeeping\\api\\HousekeepingAPI\\Repository\\ServiceRepository.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Repository\\ServiceRepository.cs",
+              "ToolTip": "D:\\git\\HouseKeeping\\api\\HousekeepingAPI\\Repository\\ServiceRepository.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Repository\\ServiceRepository.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAowCoAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-09T16:56:58.176Z",
+              "WhenOpened": "2024-12-31T04:05:40.061Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "D:\\git\\HouseKeeping\\api\\HousekeepingAPI\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "D:\\git\\HouseKeeping\\api\\HousekeepingAPI\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAA0wBoAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-31T04:05:40.063Z",
               "EditorCaption": ""
             }
           ]
