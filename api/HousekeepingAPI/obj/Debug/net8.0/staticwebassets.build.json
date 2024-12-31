@@ -1,12 +1,11 @@
 {
   "Version": 1,
-  "Hash": "kugqoQaz94B74/PmyhXfYnzmURcTUX842XAxmdl+P0A=",
+  "Hash": "PmxyFfI+TWqL8XQocXocDv5g8DtI5M8hvHIvQKXUmUI=",
   "Source": "HousekeepingAPI",
   "BasePath": "_content/HousekeepingAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
+  "Assets": []
 }
