@@ -29,7 +29,10 @@
 		<!-- Services Section -->
 		<section class="container mx-auto px-4 py-8">
 			<!-- Categories Grid -->
-			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 rtl">
+			<div
+				class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"
+				dir="rtl"
+			>
 				<CategoryCard
 					v-for="category in categories"
 					:key="category.id"

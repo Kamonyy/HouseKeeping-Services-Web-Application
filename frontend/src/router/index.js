@@ -3,6 +3,8 @@ import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
 import ServicesView from "@/views/ServicesView.vue";
 import HelpView from "@/views/HelpView.vue";
+import CategoryServicesView from "@/views/CategoryServiceView.vue"; // Import the new view
+
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
@@ -23,8 +25,14 @@ const router = createRouter({
 		},
 		{
 			path: "/help",
-			name: "Help",
+			name: "help",
 			component: HelpView,
+		},
+		{
+			path: "/category/:id",
+			name: "category",
+			component: CategoryServicesView,
+			props: true,
 		},
 	],
 });

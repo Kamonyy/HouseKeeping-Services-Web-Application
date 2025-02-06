@@ -1,14 +1,50 @@
 <script setup>
 	import { RouterView } from "vue-router";
-	// import Navbar from "@/components/Navbar.vue";
 	import Nav from "@/components/Nav.vue";
 	import Footer from "@/components/Footer.vue";
 </script>
 
 <template>
-	<Nav />
-	<RouterView />
-	<Footer />
+	<div class="layout">
+		<header>
+			<Nav />
+		</header>
+		<main>
+			<Transition name="scale" mode="out-in">
+				<RouterView />
+			</Transition>
+		</main>
+		<Footer />
+	</div>
 </template>
 
-<style scoped></style>
+<style scoped>
+	.layout {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+	header {
+		width: 100%;
+	}
+
+	main {
+		flex: 1;
+	}
+
+	footer {
+		width: 100%;
+	}
+
+	.scale-enter-active,
+	.scale-leave-active {
+		transition: transform 0.4s ease, opacity 0.4s ease;
+	}
+
+	.scale-enter-from,
+	.scale-leave-to {
+		transform: scale(1.1);
+		opacity: 0;
+	}
+</style>
