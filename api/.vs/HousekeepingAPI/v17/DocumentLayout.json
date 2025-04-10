@@ -33,8 +33,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 302,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -43,14 +47,10 @@
               "RelativeDocumentMoniker": "HousekeepingAPI\\Program.cs",
               "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Program.cs",
               "RelativeToolTip": "HousekeepingAPI\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAA9AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-06T03:07:11.611Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
@@ -62,8 +62,7 @@
               "RelativeToolTip": "HousekeepingAPI\\Migrations\\20241231040845_s.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-31T04:08:46.226Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-31T04:08:46.226Z"
             },
             {
               "$type": "Document",
@@ -99,8 +98,7 @@
               "RelativeToolTip": "HousekeepingAPI\\Repository\\ServiceRepository.cs",
               "ViewState": "AgIAACIAAAAAAAAAAAAiwCoAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-31T04:05:40.061Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-31T04:05:40.061Z"
             },
             {
               "$type": "Document",
