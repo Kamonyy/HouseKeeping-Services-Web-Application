@@ -13,7 +13,7 @@ namespace HousekeepingAPI.Models
     public enum UserType
     {
         Customer,
-        ServiceProvider,
+        Provider,
         Admin
     }
 }

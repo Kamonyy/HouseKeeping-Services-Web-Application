@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "D:\\HouseKeeping\\api\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\models\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\models\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\models\\appuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,15 +23,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Service.cs",
-              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Models\\Service.cs",
-              "RelativeDocumentMoniker": "HousekeepingAPI\\Models\\Service.cs",
-              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Models\\Service.cs",
-              "RelativeToolTip": "HousekeepingAPI\\Models\\Service.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAmwCsAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-25T06:42:35.952Z",
+              "WhenOpened": "2025-04-25T11:55:56.972Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
@@ -41,14 +45,10 @@
               "RelativeDocumentMoniker": "HousekeepingAPI\\Models\\AppUser.cs",
               "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Models\\AppUser.cs",
               "RelativeToolTip": "HousekeepingAPI\\Models\\AppUser.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAewAYAAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-25T06:41:18.857Z",
+              "WhenOpened": "2025-04-25T10:02:39.787Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             }
           ]
         }

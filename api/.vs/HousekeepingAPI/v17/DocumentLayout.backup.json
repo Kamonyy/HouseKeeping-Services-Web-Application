@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "D:\\HouseKeeping\\api\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\models\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\models\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\models\\appuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\models\\appuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,37 +18,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 302,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Service.cs",
+              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Models\\Service.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Models\\Service.cs",
+              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Models\\Service.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Models\\Service.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-25T06:42:35.952Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "launchSettings.json",
-              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Properties\\launchSettings.json",
-              "RelativeDocumentMoniker": "HousekeepingAPI\\Properties\\launchSettings.json",
-              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Properties\\launchSettings.json",
-              "RelativeToolTip": "HousekeepingAPI\\Properties\\launchSettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-12T06:30:50.444Z",
+              "Title": "AppUser.cs",
+              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Models\\AppUser.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Models\\AppUser.cs",
+              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Models\\AppUser.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Models\\AppUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-25T06:41:18.857Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Program.cs",
-              "RelativeDocumentMoniker": "HousekeepingAPI\\Program.cs",
-              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Program.cs",
-              "RelativeToolTip": "HousekeepingAPI\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-06T03:07:11.611Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             }
           ]
         }
