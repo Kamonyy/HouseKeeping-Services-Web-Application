@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HousekeepingAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c4f03fae1be99ed7c72b0e59d1a86caac66f514c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c0fa7db96f136692534f54342fce061d206c016e")]
 [assembly: System.Reflection.AssemblyProductAttribute("HousekeepingAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HousekeepingAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

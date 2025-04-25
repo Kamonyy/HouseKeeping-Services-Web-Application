@@ -57,6 +57,4 @@
 	</div>
 </template>
 
-<style scoped>
-	/* Add custom styles if needed */
-</style>
+<style scoped></style>
