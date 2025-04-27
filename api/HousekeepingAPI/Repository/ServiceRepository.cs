@@ -41,6 +41,18 @@ namespace HousekeepingAPI.Repository
             return _mapper.Map<List<ServiceListDto>>(services);
         }
 
+        public async Task<ICollection<ServiceListDto>> GetBySubCategoryIdAsync(int subCategoryId)
+        {
+            var services = await _context.Services
+                .Include(s => s.Provider)
+                .Include(s => s.ServiceSubCategory)
+                    .ThenInclude(ssc => ssc.SubCategory)
+                .Where(s => s.ServiceSubCategory.Any(ssc => ssc.SubCategoryId == subCategoryId))
+                .ToListAsync();
+
+            return _mapper.Map<List<ServiceListDto>>(services);
+        }
+
         public async Task<Models.Service> CreateAsync(CreateServiceDto serviceDto, string userId)
         {
             var transaction = await _context.Database.BeginTransactionAsync();

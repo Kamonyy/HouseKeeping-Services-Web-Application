@@ -63,6 +63,23 @@ namespace HousekeepingAPI.Controllers
             }
         }
 
+        [HttpGet("bySubCategory/{subCategoryId}")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ServiceListDto>))]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetServicesBySubCategory(int subCategoryId)
+        {
+            try
+            {
+                var services = await _serviceRepository.GetBySubCategoryIdAsync(subCategoryId);
+                return Ok(services);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting services for subcategory ID {subCategoryId}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
         [HttpPost]
         [Authorize]
         [ProducesResponseType(201, Type = typeof(Models.Service))]

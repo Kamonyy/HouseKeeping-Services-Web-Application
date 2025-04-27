@@ -269,6 +269,37 @@
     ]
   },
   {
+    "ContainingType": "HousekeepingAPI.Controllers.ServiceController",
+    "Method": "GetServicesBySubCategory",
+    "RelativePath": "api/Service/bySubCategory/{subCategoryId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "subCategoryId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[HousekeepingAPI.Dto.Service.ServiceListDto, HousekeepingAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
     "ContainingType": "HousekeepingAPI.Controllers.SubCategoryController",
     "Method": "GetAll",
     "RelativePath": "api/subCategory",

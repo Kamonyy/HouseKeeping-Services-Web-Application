@@ -45,66 +45,96 @@
 </script>
 
 <template>
-	<form @submit.prevent="login">
-		<div class="form-group">
-			<label for="username">اسم المسنخدم:</label>
-			<input type="text" id="username" v-model="username" required />
-		</div>
-		<div class="form-group">
-			<label for="password">كلمة المرور:</label>
-			<input type="password" id="password" v-model="password" required />
-		</div>
-		<button type="submit">تسجيل دخول</button>
-		<button type="button" @click="logout" v-if="isLoggedIn">Logout</button>
-		<div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-	</form>
+	<div class="flex items-center justify-center py-12 bg-white animate-fadeIn">
+		<form
+			@submit.prevent="login"
+			class="bg-white rounded-xl shadow-glow p-6 max-w-sm w-full relative overflow-hidden mx-auto"
+		>
+			<div class="static-glow"></div>
+			<h2
+				class="text-2xl font-semibold mb-5 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-blue-500"
+			>
+				تسجيل الدخول
+			</h2>
+			<div class="mb-4">
+				<label for="username" class="block text-gray-700 text-sm font-bold mb-2"
+					>اسم المستخدم:</label
+				>
+				<input
+					type="text"
+					id="username"
+					v-model="username"
+					required
+					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 border-gray-300"
+					placeholder="ادخل اسم المستخدم"
+				/>
+			</div>
+			<div class="mb-5">
+				<label for="password" class="block text-gray-700 text-sm font-bold mb-2"
+					>كلمة المرور:</label
+				>
+				<input
+					type="password"
+					id="password"
+					v-model="password"
+					required
+					class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 border-gray-300"
+					placeholder="ادخل كلمة المرور"
+				/>
+			</div>
+			<button
+				type="submit"
+				class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 w-full transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+			>
+				تسجيل دخول
+			</button>
+			<div
+				v-if="errorMessage"
+				class="text-red-500 text-sm mt-4 text-center bg-red-50 p-2 rounded-lg border border-red-200"
+			>
+				{{ errorMessage }}
+			</div>
+		</form>
+	</div>
 </template>
 
 <style scoped>
-	form {
-		background-color: #f9f9f9;
-		border-radius: 8px;
-		padding: 20px;
-		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-		max-width: 400px;
-		margin: 50px auto;
+	.shadow-glow {
+		box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
 	}
 
-	.form-group {
-		margin-bottom: 15px;
-	}
-
-	label {
-		color: black;
-		display: block;
-		margin-bottom: 5px;
-		font-weight: bold;
-	}
-
-	input {
-		color: rgb(61, 61, 61);
+	.static-glow {
+		position: absolute;
+		top: 0;
+		left: 0;
 		width: 100%;
-		padding: 10px;
-		border: 1px solid #ccc;
-		border-radius: 4px;
+		height: 100%;
+		background: radial-gradient(
+			circle at center,
+			rgba(59, 130, 246, 0.05) 0%,
+			transparent 70%
+		);
+		opacity: 0.8;
+		pointer-events: none;
+		z-index: 0;
 	}
 
-	button {
-		background-color: #007bff;
-		color: white;
-		border: none;
-		padding: 10px;
-		border-radius: 4px;
-		cursor: pointer;
-		width: 100%;
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
 	}
 
-	button:hover {
-		background-color: #0056b3;
+	.animate-fadeIn {
+		animation: fadeIn 0.8s ease-out;
 	}
 
-	.error-message {
-		color: red;
-		margin-top: 10px;
+	input:focus {
+		border-color: #3b82f6;
 	}
 </style>
