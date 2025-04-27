@@ -1,12 +1,15 @@
 ﻿using HousekeepingAPI.Dto.Service;
-using HousekeepingAPI.Models;
-
 namespace HousekeepingAPI.Interfaces
 {
     public interface IServiceRepository
     {
-        Task<ICollection<Models.Service>> GetAllAsync();
-        Task<Models.Service?> GetByIdAsync(int id);
-        Task<List<ServiceSubCategory>> CreateAsync(Models.Service service, List<int> subCategoryIds);
+        Task<ServiceDetailsDto> GetByIdAsync(int id);
+        Task<Models.Service> GetServiceById(int id);
+
+        Task<ICollection<ServiceListDto>> GetAllAsync();
+        Task<Models.Service> CreateAsync(CreateServiceDto serviceDto, string userId);
+        Task<bool> UpdateAsync(int id, UpdateServiceDto serviceDto);
+        Task<bool> DeleteAsync(int id);
+        Task<bool> Exists(int id);
     }
 }

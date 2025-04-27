@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HousekeepingAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241231040845_s")]
-    partial class s
+    [Migration("20250426101058_updated")]
+    partial class updated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,12 +37,23 @@ namespace HousekeepingAPI.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime>("DateRegistered")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
@@ -76,6 +87,9 @@ namespace HousekeepingAPI.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
+
+                    b.Property<int>("UserType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -114,19 +128,34 @@ namespace HousekeepingAPI.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ContactPhone")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<decimal>("EstimatedPrice")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("ProviderId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProviderId");
 
                     b.ToTable("Services");
                 });
@@ -196,19 +225,19 @@ namespace HousekeepingAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5affe056-7ef4-41e5-84c4-929b04fd2175",
+                            Id = "ebfc0c00-4db7-48b9-b830-387443bbc945",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "b7d107e7-7cf3-4195-9b0b-5cf0d2ecbc16",
+                            Id = "9ef9bdc0-dc16-4f7d-94a8-40bda4ba1940",
                             Name = "Provider",
                             NormalizedName = "PROVIDER"
                         },
                         new
                         {
-                            Id = "f4b1caba-a489-4dd8-ae59-9968ceeba059",
+                            Id = "5a259e95-4e7f-4464-b2cd-2ef24f92d74b",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -318,6 +347,15 @@ namespace HousekeepingAPI.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("HousekeepingAPI.Models.Service", b =>
+                {
+                    b.HasOne("HousekeepingAPI.Models.AppUser", "Provider")
+                        .WithMany()
+                        .HasForeignKey("ProviderId");
+
+                    b.Navigation("Provider");
                 });
 
             modelBuilder.Entity("HousekeepingAPI.Models.ServiceSubCategory", b =>

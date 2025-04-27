@@ -1,96 +1,150 @@
 ﻿using AutoMapper;
 using HousekeepingAPI.Dto.Service;
-using HousekeepingAPI.Extentions;
 using HousekeepingAPI.Interfaces;
-using HousekeepingAPI.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace HousekeepingAPI.Controllers
 {
-    [Route("api/service")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ServiceController : ControllerBase
     {
-        private readonly IServiceRepository _serviceRepo;
+        private readonly IServiceRepository _serviceRepository;
         private readonly IMapper _mapper;
-        private readonly UserManager<AppUser> _userManger;
-        private readonly ISubCategoryRepository _subCategoryRepo;
+        private readonly ILogger<ServiceController> _logger;
 
-        public ServiceController(IServiceRepository serviceRepository, IMapper mapper,
-            UserManager<AppUser> userManger    
-            , ISubCategoryRepository subCategoryRepository)
+        public ServiceController(
+            IServiceRepository serviceRepository,
+            IMapper mapper,
+            ILogger<ServiceController> logger)
         {
-            _serviceRepo = serviceRepository;
+            _serviceRepository = serviceRepository;
             _mapper = mapper;
-            _userManger = userManger;
-            _subCategoryRepo = subCategoryRepository;
-
+            _logger = logger;
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<ServiceDto>))]
-        public async Task<IActionResult> GetAll()
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ServiceListDto>))]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetAllServices()
         {
-            var services = await _serviceRepo.GetAllAsync();
-            var mappedServices = _mapper.Map<List<ServiceDto>>(services);
-
-            if (!ModelState.IsValid)
-                return BadRequest();
-
-            return Ok(mappedServices);
+            try
+            {
+                var services = await _serviceRepository.GetAllAsync();
+                return Ok(services);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all services");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
-        [HttpGet("{serviceId}")]
-        [ProducesResponseType(200, Type = typeof(ServiceDto))]
+        [HttpGet("{id}")]
+        [ProducesResponseType(200, Type = typeof(ServiceDetailsDto))]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetServiceById(int serviceId)
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetService(int id)
         {
-            var service = await _serviceRepo.GetByIdAsync(serviceId);
+            try
+            {
+                if (!await _serviceRepository.Exists(id))
+                    return NotFound();
 
-            if (service == null)
-                return NotFound();
-
-            var mappedService = _mapper.Map<ServiceDto>(service);
-
-            if (!ModelState.IsValid)
-                return BadRequest();
-
-            return Ok(mappedService);
+                var service = await _serviceRepository.GetByIdAsync(id);
+                return Ok(service);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting service with ID {id}");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(201, Type = typeof(ServiceDto))]
+        [ProducesResponseType(201, Type = typeof(Models.Service))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> CreateService([FromBody] CreateServiceDto serviceDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var service = await _serviceRepository.CreateAsync(serviceDto, userId);
+                return CreatedAtAction(nameof(GetService), new { id = service.Id }, service);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating service");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPut("{id}")]
+        [Authorize]
+        [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> Create([FromBody] CreateServiceDto createServiceDto)
+        public async Task<IActionResult> UpdateService(int id, [FromBody] UpdateServiceDto updateServiceDto)
         {
-            if (createServiceDto == null || string.IsNullOrEmpty(createServiceDto.Title))
-                return BadRequest("Invalid data.");
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            if (createServiceDto.SubCategoryIds == null || !createServiceDto.SubCategoryIds.Any())
-                return BadRequest("SubCategoryIds cannot be null or empty.");
+                if (!await _serviceRepository.Exists(id))
+                    return NotFound();
 
-            var subCategories = await _subCategoryRepo.GetAllByIdsAsync(createServiceDto.SubCategoryIds);
+                var success = await _serviceRepository.UpdateAsync(id, updateServiceDto);
+                if (!success)
+                    return StatusCode(500, "Could not update service");
 
-            if (subCategories.Count != createServiceDto.SubCategoryIds.Count)
-                return NotFound("One or more Sub-Categories do not exist.");
-
-            var service = _mapper.Map<Models.Service>(createServiceDto);
-
-            service.Username = User.GetUsername();
-            var createdServiceSubCategories = await _serviceRepo.CreateAsync(service, createServiceDto.SubCategoryIds);
-
-            if (createdServiceSubCategories == null || !createdServiceSubCategories.Any())
-                return StatusCode(500, "Unable to save Service or its relationships.");
-
-            var mappedResponse = _mapper.Map<ServiceDto>(service);
-
-            return CreatedAtAction(nameof(GetServiceById), new { serviceId = service.Id }, mappedResponse);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error updating service with ID {id}");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
+        [HttpDelete("{id}")]
+        [Authorize]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DeleteService(int id)
+        {
+            try
+            {
+                if (!await _serviceRepository.Exists(id))
+                    return NotFound();
+
+                var service = await _serviceRepository.GetServiceById(id);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+                if (service.UserId != userId)
+                    return Forbid();
+
+                var success = await _serviceRepository.DeleteAsync(id);
+                if (!success)
+                    return StatusCode(500, "Could not delete service");
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error deleting service with ID {id}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }

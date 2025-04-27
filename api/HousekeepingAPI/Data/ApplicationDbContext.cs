@@ -2,6 +2,10 @@
 using HousekeepingAPI.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.Extensions.Options;
+
 namespace HousekeepingAPI.Data
 {
     public class ApplicationDbContext : IdentityDbContext<AppUser>
@@ -18,18 +22,18 @@ namespace HousekeepingAPI.Data
         {
 
             base.OnModelCreating(modelBuilder);
-             
+
             modelBuilder.Entity<ServiceSubCategory>()
                 .HasKey(ssc => new { ssc.ServiceId, ssc.SubCategoryId });
 
             modelBuilder.Entity<ServiceSubCategory>()
                 .HasOne(ssc => ssc.Service)
-                .WithMany(ssc => ssc.ServiceSubCategory)
+                .WithMany(s => s.ServiceSubCategory)
                 .HasForeignKey(s => s.ServiceId);
 
             modelBuilder.Entity<ServiceSubCategory>()
                 .HasOne(ssc => ssc.SubCategory)
-                .WithMany(ssc => ssc.ServiceSubCategory)
+                .WithMany(sc => sc.ServiceSubCategory)
                 .HasForeignKey(s => s.SubCategoryId);
 
             List<IdentityRole> roles =
