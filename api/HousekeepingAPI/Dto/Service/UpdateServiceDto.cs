@@ -7,5 +7,6 @@
         public decimal EstimatedPrice { get; set; }
         public string ContactPhone { get; set; }
         public List<int> SubCategoryIds { get; set; }
+        public bool IsApproved { get; set; }
     }
 }

@@ -15,6 +15,22 @@
 					>خدماتنا</RouterLink
 				>
 			</div>
+
+			<!-- Provider Management Link (visible only to providers) -->
+			<div class="link-container" v-if="userStore.isProvider">
+				<RouterLink
+					:class="linkStyle('/provider-management')"
+					to="/provider-management"
+					>إدارة الخدمات</RouterLink
+				>
+			</div>
+
+			<!-- Admin Approval Link (visible only to admins) -->
+			<div class="link-container" v-if="userStore.isAdmin">
+				<RouterLink :class="linkStyle('/admin/dashboard')" to="/admin/dashboard"
+					>لوحة التحكم</RouterLink
+				>
+			</div>
 		</div>
 
 		<div class="flex items-center gap-5 rtl:space-x-reverse">

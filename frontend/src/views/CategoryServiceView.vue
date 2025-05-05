@@ -3,6 +3,7 @@
 	import { ref, onMounted } from "vue";
 	import { useRoute, useRouter } from "vue-router";
 	import axios from "axios";
+	import { extractArrayFromResponse } from "../utils/apiUtils";
 
 	const route = useRoute();
 	const router = useRouter();
@@ -22,16 +23,24 @@
 	const fetchSubCategories = async () => {
 		try {
 			const response = await axios.get(
-				`https://localhost:7007/api/subcategory/bycategory/${categoryId}`
+				`/api/subcategory/bycategory/${categoryId}`
 			);
-			subCategories.value = response.data;
+			// Use the utility function to handle different response formats
+			subCategories.value = extractArrayFromResponse(
+				response.data,
+				"subcategories"
+			);
 
 			// Get category name if first item has categoryName
-			if (response.data.length > 0 && response.data[0].categoryName) {
-				categoryName.value = response.data[0].categoryName;
+			if (
+				subCategories.value.length > 0 &&
+				subCategories.value[0].categoryName
+			) {
+				categoryName.value = subCategories.value[0].categoryName;
 			}
 		} catch (error) {
 			console.error("Error fetching subcategories:", error);
+			subCategories.value = [];
 		}
 	};
 
@@ -80,9 +89,13 @@
 
 		try {
 			const response = await axios.get(
-				`https://localhost:7007/api/service/bySubCategory/${subCategoryId}`
+				`/api/service/bySubCategory/${subCategoryId}`
 			);
-			servicesBySubCategory.value = response.data;
+			// Use the utility function to handle different response formats
+			servicesBySubCategory.value = extractArrayFromResponse(
+				response.data,
+				"services"
+			);
 
 			// Small delay to ensure animation feels natural
 			setTimeout(() => {
@@ -272,7 +285,6 @@
 					<div class="card-inner w-full h-full">
 						<!-- Glass border overlay -->
 						<div class="fancy-glass-border"></div>
-
 						<!-- Service Image -->
 						<div class="relative overflow-hidden h-44">
 							<img

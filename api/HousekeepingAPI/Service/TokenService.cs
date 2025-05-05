@@ -1,5 +1,6 @@
 ﻿using HousekeepingAPI.Interfaces;
 using HousekeepingAPI.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,11 +12,13 @@ namespace HousekeepingAPI.Service
     {
         private readonly IConfiguration _config;
         private readonly SymmetricSecurityKey _key;
+        private readonly UserManager<AppUser> _userManager;
 
-        public TokenService(IConfiguration config)
+        public TokenService(IConfiguration config, UserManager<AppUser> userManager)
         {
             _config = config;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"]));
+            _userManager = userManager;
         }
 
         public string CreateToken(AppUser user)
@@ -32,6 +35,13 @@ namespace HousekeepingAPI.Service
                 new Claim("userId", user.Id),
                 new Claim("userType", user.UserType.ToString())
             };
+
+            // Add user roles to the claims
+            var roles = _userManager.GetRolesAsync(user).Result;
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 

@@ -2,15 +2,17 @@
 	import { ref, onMounted } from "vue";
 	import axios from "axios";
 	import CategoryCard from "@/components/CategoryCard.vue";
+	import { extractArrayFromResponse } from "@/utils/apiUtils";
 
 	const categories = ref([]);
 
 	const fetchCategories = async () => {
 		try {
-			const response = await axios.get("https://localhost:7007/api/category");
-			categories.value = response.data;
+			const response = await axios.get("/api/category");
+			categories.value = extractArrayFromResponse(response.data, "categories");
 		} catch (error) {
 			console.error("Error fetching categories:", error);
+			categories.value = [];
 		}
 	};
 

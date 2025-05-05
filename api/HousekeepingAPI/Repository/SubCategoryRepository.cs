@@ -31,13 +31,13 @@ namespace HousekeepingAPI.Repository
         {
             return await _context.SubCategories
                 .Include(sc => sc.Category)
-                .FirstOrDefaultAsync(sc => sc.id == id);
+                .FirstOrDefaultAsync(sc => sc.Id == id);
         }
 
         public async Task<ICollection<SubCategory>> GetAllByIdsAsync(IEnumerable<int> ids)
         {
             return await _context.SubCategories
-                .Where(sc => ids.Contains(sc.id))
+                .Where(sc => ids.Contains(sc.Id))
                 .ToListAsync();
         }
 
@@ -49,7 +49,7 @@ namespace HousekeepingAPI.Repository
         }
         public async Task<SubCategory?> UpdateAsync(int id, SubCategory subCategory)
         {
-            var existingSubCategory = await _context.SubCategories.FirstOrDefaultAsync(sc => sc.id == id);
+            var existingSubCategory = await _context.SubCategories.FirstOrDefaultAsync(sc => sc.Id == id);
 
             if (existingSubCategory == null)
                 return null;
@@ -64,7 +64,7 @@ namespace HousekeepingAPI.Repository
 
         public async Task<SubCategory?> DeleteAsync(int id)
         {
-            var subCategory = await _context.SubCategories.FirstOrDefaultAsync(sc => sc.id == id);
+            var subCategory = await _context.SubCategories.FirstOrDefaultAsync(sc => sc.Id == id);
 
             if (subCategory == null)
                 return null;

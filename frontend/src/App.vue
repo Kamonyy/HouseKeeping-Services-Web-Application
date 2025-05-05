@@ -10,9 +10,11 @@
 			<Nav />
 		</header>
 		<main>
-			<Transition name="scale" mode="out-in">
-				<RouterView />
-			</Transition>
+			<RouterView v-slot="{ Component }">
+				<Transition name="scale" mode="out-in">
+					<component :is="Component" />
+				</Transition>
+			</RouterView>
 		</main>
 		<Footer />
 	</div>

@@ -4,6 +4,7 @@ using HousekeepingAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HousekeepingAPI.Controllers
 {
@@ -14,12 +15,14 @@ namespace HousekeepingAPI.Controllers
         private readonly UserManager<AppUser> _userManger;
         private readonly ITokenService _tokenService;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AccountController(UserManager<AppUser> userManger, ITokenService tokenService, SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManger, ITokenService tokenService, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _userManger = userManger;
             _tokenService = tokenService;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
         [HttpPost("login")]
@@ -90,6 +93,33 @@ namespace HousekeepingAPI.Controllers
             {
                 return StatusCode(500, e);
             }
+        }
+
+        [HttpPost("update-role")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateUserRole([FromBody] UpdateRoleDto updateRoleDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _userManger.FindByNameAsync(updateRoleDto.Username);
+            if (user == null)
+                return NotFound("User not found");
+
+            var roles = await _userManger.GetRolesAsync(user);
+            
+            await _userManger.RemoveFromRolesAsync(user, roles);
+            
+            bool roleExists = await _roleManager.RoleExistsAsync(updateRoleDto.Role);
+            if (!roleExists)
+                return BadRequest($"Role '{updateRoleDto.Role}' does not exist");
+                
+            var result = await _userManger.AddToRoleAsync(user, updateRoleDto.Role);
+            
+            if (result.Succeeded)
+                return Ok(new { Message = $"User {updateRoleDto.Username} has been assigned to the role {updateRoleDto.Role}" });
+            
+            return StatusCode(500, result.Errors);
         }
     }
 }

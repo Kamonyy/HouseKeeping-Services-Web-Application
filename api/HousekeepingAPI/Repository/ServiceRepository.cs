@@ -25,6 +25,7 @@ namespace HousekeepingAPI.Repository
                 .Include(s => s.Provider)
                 .Include(s => s.ServiceSubCategory)
                     .ThenInclude(ssc => ssc.SubCategory)
+                        .ThenInclude(sc => sc.Category)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             return _mapper.Map<ServiceDetailsDto>(service);
@@ -36,6 +37,91 @@ namespace HousekeepingAPI.Repository
                 .Include(s => s.Provider)
                 .Include(s => s.ServiceSubCategory)
                     .ThenInclude(ssc => ssc.SubCategory)
+                        .ThenInclude(sc => sc.Category)
+                .Where(s => s.IsApproved) // Only return approved services
+                .ToListAsync();
+
+            return _mapper.Map<List<ServiceListDto>>(services);
+        }
+        
+        public async Task<ICollection<ServiceListDto>> GetByProviderIdAsync(string userId)
+        {
+            try 
+            {
+                // Add debug logging
+                Console.WriteLine($"GetByProviderIdAsync: Looking for services with UserId = {userId}");
+                
+                var services = await _context.Services
+                    .Include(s => s.Provider)
+                    .Include(s => s.ServiceSubCategory)
+                        .ThenInclude(ssc => ssc.SubCategory)
+                            .ThenInclude(sc => sc.Category)
+                    .Where(s => s.UserId == userId)
+                    .ToListAsync();
+                
+                Console.WriteLine($"GetByProviderIdAsync: Found {services.Count} services for user {userId}");
+                foreach (var service in services)
+                {
+                    Console.WriteLine($"Service ID: {service.Id}, Title: {service.Title}, SubCategories: {service.ServiceSubCategory?.Count ?? 0}");
+                }
+                
+                // Map to DTOs with explict subcategory mapping
+                var serviceDtos = _mapper.Map<List<ServiceListDto>>(services);
+                
+                // Manually ensure subcategories are mapped correctly if needed
+                for(int i = 0; i < services.Count; i++)
+                {
+                    if (i < serviceDtos.Count && services[i].ServiceSubCategory != null)
+                    {
+                        // Ensure the DTO has subcategories
+                        if (serviceDtos[i].SubCategories == null)
+                        {
+                            serviceDtos[i].SubCategories = new List<Dto.ServiceSubCategory.ServiceSubCategoryDto>();
+                        }
+                        
+                        // Log what we're doing
+                        Console.WriteLine($"Mapping subcategories for service {services[i].Id} - {services[i].ServiceSubCategory.Count} subcategories found");
+                        
+                        // Manual mapping if needed
+                        if (serviceDtos[i].SubCategories.Count == 0 && services[i].ServiceSubCategory.Count > 0)
+                        {
+                            foreach (var sc in services[i].ServiceSubCategory)
+                            {
+                                if (sc.SubCategory != null)
+                                {
+                                    serviceDtos[i].SubCategories.Add(new Dto.ServiceSubCategory.ServiceSubCategoryDto
+                                    {
+                                        Id = sc.SubCategory.Id,
+                                        SubCategoryId = sc.SubCategory.Id,
+                                        Name = sc.SubCategory.Name,
+                                        SubCategoryName = sc.SubCategory.Name,
+                                        CategoryId = sc.SubCategory.CategoryId,
+                                        CategoryName = sc.SubCategory.Category?.Name ?? string.Empty
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                Console.WriteLine($"GetByProviderIdAsync: Returning {serviceDtos.Count} ServiceListDto objects");
+                return serviceDtos;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetByProviderIdAsync: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                throw;
+            }
+        }
+        
+        public async Task<ICollection<ServiceListDto>> GetAllForAdminAsync()
+        {
+            var services = await _context.Services
+                .Include(s => s.Provider)
+                .Include(s => s.ServiceSubCategory)
+                    .ThenInclude(ssc => ssc.SubCategory)
+                        .ThenInclude(sc => sc.Category)
                 .ToListAsync();
 
             return _mapper.Map<List<ServiceListDto>>(services);
@@ -47,7 +133,8 @@ namespace HousekeepingAPI.Repository
                 .Include(s => s.Provider)
                 .Include(s => s.ServiceSubCategory)
                     .ThenInclude(ssc => ssc.SubCategory)
-                .Where(s => s.ServiceSubCategory.Any(ssc => ssc.SubCategoryId == subCategoryId))
+                        .ThenInclude(sc => sc.Category)
+                .Where(s => s.ServiceSubCategory.Any(ssc => ssc.SubCategoryId == subCategoryId) && s.IsApproved) // Only return approved services
                 .ToListAsync();
 
             return _mapper.Map<List<ServiceListDto>>(services);
@@ -58,16 +145,12 @@ namespace HousekeepingAPI.Repository
             var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                var user = await _context.Users.FindAsync(userId);
-
-                if (user == null)
-                {
-                    throw new Exception("User not found");
-                }
+                var user = await _context.Users.FindAsync(userId) ?? throw new Exception("User not found");
                 var service = _mapper.Map<Models.Service>(serviceDto);
                 service.UserId = userId;
                 service.Provider = user;
                 service.CreatedDate = DateTime.UtcNow;
+                service.IsApproved = false; // New services need approval
 
                 await _context.Services.AddAsync(service);
                 await _context.SaveChangesAsync();
@@ -82,7 +165,24 @@ namespace HousekeepingAPI.Repository
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return service;
+                // Detach all entities from the context to avoid circular references
+                foreach (var entry in _context.ChangeTracker.Entries())
+                {
+                    entry.State = EntityState.Detached;
+                }
+
+                // Return the service without loading relationships to avoid circular references
+                return new Models.Service
+                {
+                    Id = service.Id,
+                    Title = service.Title,
+                    Description = service.Description,
+                    EstimatedPrice = service.EstimatedPrice,
+                    ContactPhone = service.ContactPhone,
+                    CreatedDate = service.CreatedDate,
+                    IsApproved = service.IsApproved,
+                    UserId = service.UserId
+                };
             }
             catch (Exception ex)
             {
@@ -124,6 +224,24 @@ namespace HousekeepingAPI.Repository
         public async Task<Models.Service> GetServiceById(int id)
         {
             return await _context.Services.FindAsync(id);
+        }
+        
+        public async Task<bool> ApproveServiceAsync(int id)
+        {
+            var service = await _context.Services.FindAsync(id);
+            if (service == null) return false;
+            
+            service.IsApproved = true;
+            return await _context.SaveChangesAsync() > 0;
+        }
+        
+        public async Task<bool> RevokeServiceApprovalAsync(int id)
+        {
+            var service = await _context.Services.FindAsync(id);
+            if (service == null) return false;
+            
+            service.IsApproved = false;
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

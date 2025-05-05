@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HousekeepingAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class updated : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -229,9 +229,7 @@ namespace HousekeepingAPI.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProviderId = table.Column<string>(type: "varchar(255)", nullable: true)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     EstimatedPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     ContactPhone = table.Column<string>(type: "longtext", nullable: false)
@@ -242,10 +240,11 @@ namespace HousekeepingAPI.Migrations
                 {
                     table.PrimaryKey("PK_Services", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Services_AspNetUsers_ProviderId",
-                        column: x => x.ProviderId,
+                        name: "FK_Services_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -266,6 +265,37 @@ namespace HousekeepingAPI.Migrations
                         name: "FK_SubCategories_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Content = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ServiceId = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comments_Services_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -301,9 +331,9 @@ namespace HousekeepingAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "5a259e95-4e7f-4464-b2cd-2ef24f92d74b", null, "User", "USER" },
-                    { "9ef9bdc0-dc16-4f7d-94a8-40bda4ba1940", null, "Provider", "PROVIDER" },
-                    { "ebfc0c00-4db7-48b9-b830-387443bbc945", null, "Admin", "ADMIN" }
+                    { "212ceb29-7aa7-401e-8572-a118e9116445", null, "Admin", "ADMIN" },
+                    { "8e804485-b8c8-4ac6-b604-8a87d5e4f0d1", null, "Provider", "PROVIDER" },
+                    { "e259045b-fa02-4989-8936-0c276d3a8378", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -344,9 +374,19 @@ namespace HousekeepingAPI.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Services_ProviderId",
+                name: "IX_Comments_ServiceId",
+                table: "Comments",
+                column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_UserId",
+                table: "Comments",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Services_UserId",
                 table: "Services",
-                column: "ProviderId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ServiceSubCategories_SubCategoryId",
@@ -376,6 +416,9 @@ namespace HousekeepingAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "ServiceSubCategories");

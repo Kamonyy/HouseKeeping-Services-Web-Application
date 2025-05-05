@@ -17,6 +17,7 @@ namespace HousekeepingAPI.Data
         public DbSet<Models.Service> Services { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<ServiceSubCategory> ServiceSubCategories { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -54,8 +55,9 @@ namespace HousekeepingAPI.Data
                     NormalizedName = "USER"
                 },
             ];
+            
             modelBuilder.Entity<IdentityRole>().HasData(roles);
-
         }
+        
     }
 }

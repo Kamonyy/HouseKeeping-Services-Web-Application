@@ -79,7 +79,7 @@ namespace HousekeepingAPI.Controllers
             if (createdSubCategory == null)
                 return StatusCode(500, "Unable to save SubCategory.");
 
-            return CreatedAtAction(nameof(GetSubCategoryById), new { id = createdSubCategory.id }, createdSubCategory);
+            return CreatedAtAction(nameof(GetSubCategoryById), new { id = createdSubCategory.Id }, createdSubCategory);
         }
 
         [HttpDelete("{id}")]

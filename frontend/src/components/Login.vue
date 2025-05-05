@@ -3,6 +3,7 @@
 	import { useRouter } from "vue-router";
 	import axios from "axios";
 	import { useUserStore } from "../store/userStore";
+	import { extractAuthFromResponse } from "../utils/apiUtils";
 
 	const router = useRouter();
 	const userStore = useUserStore();
@@ -13,23 +14,32 @@
 	const login = async () => {
 		if (username.value && password.value) {
 			try {
-				const response = await axios.post(
-					"https://localhost:7007/api/account/login",
-					{
-						username: username.value,
-						password: password.value,
-					}
-				);
+				const response = await axios.post("/api/account/login", {
+					username: username.value,
+					password: password.value,
+				});
 				console.log("Response from API:", response.data);
 
-				// Store username and token in the userStore
-				userStore.setUser(
-					response.data.username || username.value,
-					response.data.token
-				);
+				// Handle different response formats and extract token
+				if (response.data) {
+					const { username: extractedUsername, token } =
+						extractAuthFromResponse(response.data, username.value);
 
-				errorMessage.value = "";
-				router.push("/");
+					if (!token) {
+						console.error("Could not find token in response:", response.data);
+						errorMessage.value =
+							"Invalid response from server. Please try again.";
+						return;
+					}
+
+					// Store username and token in the userStore
+					userStore.setUser(extractedUsername, token);
+					errorMessage.value = "";
+					router.push("/");
+				} else {
+					errorMessage.value =
+						"Invalid response from server. Please try again.";
+				}
 			} catch (error) {
 				if (error.response && error.response.status === 401) {
 					errorMessage.value = "Invalid credentials. Please try again.";

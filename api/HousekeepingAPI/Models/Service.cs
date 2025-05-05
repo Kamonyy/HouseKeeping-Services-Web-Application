@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace HousekeepingAPI.Models
 {
@@ -17,7 +18,10 @@ namespace HousekeepingAPI.Models
         public string ContactPhone { get; set; } = string.Empty;
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        
+        public bool IsApproved { get; set; } = false;
 
+        [JsonIgnore]
         public ICollection<ServiceSubCategory> ServiceSubCategory { get; set; } = new List<ServiceSubCategory>();
 
     }

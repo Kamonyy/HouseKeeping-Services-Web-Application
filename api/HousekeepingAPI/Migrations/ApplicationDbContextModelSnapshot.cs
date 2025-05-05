@@ -117,6 +117,37 @@ namespace HousekeepingAPI.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("HousekeepingAPI.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("HousekeepingAPI.Models.Service", b =>
                 {
                     b.Property<int>("Id")
@@ -139,8 +170,8 @@ namespace HousekeepingAPI.Migrations
                     b.Property<decimal>("EstimatedPrice")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<string>("ProviderId")
-                        .HasColumnType("varchar(255)");
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -148,11 +179,11 @@ namespace HousekeepingAPI.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProviderId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Services");
                 });
@@ -222,19 +253,19 @@ namespace HousekeepingAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ebfc0c00-4db7-48b9-b830-387443bbc945",
+                            Id = "212ceb29-7aa7-401e-8572-a118e9116445",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "9ef9bdc0-dc16-4f7d-94a8-40bda4ba1940",
+                            Id = "8e804485-b8c8-4ac6-b604-8a87d5e4f0d1",
                             Name = "Provider",
                             NormalizedName = "PROVIDER"
                         },
                         new
                         {
-                            Id = "5a259e95-4e7f-4464-b2cd-2ef24f92d74b",
+                            Id = "e259045b-fa02-4989-8936-0c276d3a8378",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -346,11 +377,32 @@ namespace HousekeepingAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("HousekeepingAPI.Models.Comment", b =>
+                {
+                    b.HasOne("HousekeepingAPI.Models.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HousekeepingAPI.Models.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("HousekeepingAPI.Models.Service", b =>
                 {
                     b.HasOne("HousekeepingAPI.Models.AppUser", "Provider")
                         .WithMany()
-                        .HasForeignKey("ProviderId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Provider");
                 });
