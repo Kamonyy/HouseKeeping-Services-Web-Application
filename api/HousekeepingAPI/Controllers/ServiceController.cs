@@ -33,6 +33,15 @@ namespace HousekeepingAPI.Controllers
             try
             {
                 var services = await _serviceRepository.GetAllAsync();
+                
+                // Get ratings for each service
+                foreach (var service in services)
+                {
+                    var (rating, count) = await _serviceRepository.GetServiceRatingAsync(service.Id);
+                    service.AverageRating = rating;
+                    service.RatingCount = count;
+                }
+                
                 return Ok(services);
             }
             catch (Exception ex)
@@ -91,6 +100,12 @@ namespace HousekeepingAPI.Controllers
                     return NotFound();
 
                 var service = await _serviceRepository.GetByIdAsync(id);
+                
+                // Get the rating information for this service
+                var (rating, count) = await _serviceRepository.GetServiceRatingAsync(id);
+                service.AverageRating = rating;
+                service.RatingCount = count;
+                
                 return Ok(service);
             }
             catch (Exception ex)
@@ -108,6 +123,15 @@ namespace HousekeepingAPI.Controllers
             try
             {
                 var services = await _serviceRepository.GetBySubCategoryIdAsync(subCategoryId);
+                
+                // Get ratings for each service
+                foreach (var service in services)
+                {
+                    var (rating, count) = await _serviceRepository.GetServiceRatingAsync(service.Id);
+                    service.AverageRating = rating;
+                    service.RatingCount = count;
+                }
+                
                 return Ok(services);
             }
             catch (Exception ex)
@@ -117,8 +141,34 @@ namespace HousekeepingAPI.Controllers
             }
         }
 
+        [HttpGet("category/{categoryId}")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ServiceListDto>))]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetServicesByCategoryId(int categoryId)
+        {
+            try
+            {
+                var services = await _serviceRepository.GetByCategoryIdAsync(categoryId);
+                
+                // Get ratings for each service
+                foreach (var service in services)
+                {
+                    var (rating, count) = await _serviceRepository.GetServiceRatingAsync(service.Id);
+                    service.AverageRating = rating;
+                    service.RatingCount = count;
+                }
+                
+                return Ok(services);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting services for category ID {categoryId}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
         [HttpPost]
-        [Authorize(Roles = "Provider")]
+        [Authorize(Roles = "Provider,Admin")]
         [ProducesResponseType(201, Type = typeof(ServiceDetailsDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -145,7 +195,7 @@ namespace HousekeepingAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "Provider")]
+        [Authorize(Roles = "Provider,Admin")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -155,30 +205,45 @@ namespace HousekeepingAPI.Controllers
             try
             {
                 if (!ModelState.IsValid)
+                {
+                    _logger.LogWarning($"Invalid model state when updating service {id}");
                     return BadRequest(ModelState);
+                }
 
                 if (!await _serviceRepository.Exists(id))
+                {
+                    _logger.LogWarning($"Service with ID {id} not found during update attempt");
                     return NotFound();
+                }
                 
                 var service = await _serviceRepository.GetServiceById(id);
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 if (service.UserId != userId)
+                {
+                    _logger.LogWarning($"Unauthorized attempt to update service {id} by user {userId}");
                     return Forbid();
+                }
                     
                 // Reset approval status when service is updated
                 updateServiceDto.IsApproved = false;
 
+                _logger.LogInformation($"Updating service {id} with {updateServiceDto.SubCategoryIds?.Count ?? 0} subcategories");
+                
                 var success = await _serviceRepository.UpdateAsync(id, updateServiceDto);
                 if (!success)
+                {
+                    _logger.LogError($"Repository failed to update service {id}");
                     return StatusCode(500, "Could not update service");
+                }
 
+                _logger.LogInformation($"Successfully updated service {id}");
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error updating service with ID {id}");
-                return StatusCode(500, "Internal server error");
+                _logger.LogError(ex, $"Error updating service with ID {id}: {ex.Message}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
         

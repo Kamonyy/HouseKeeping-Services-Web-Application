@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
+import RegisterView from "@/views/RegisterView.vue";
 import ServicesView from "@/views/ServicesView.vue";
 import HelpView from "@/views/HelpView.vue";
 import CategoryServicesView from "@/views/CategoryServiceView.vue"; // Import the new view
 import ProviderManagementView from "@/views/ProviderManagementView.vue";
 import AdminDashboardView from "@/views/AdminDashboardView.vue";
+import ServiceDetailView from "@/views/ServiceDetailView.vue"; // Import the new view
 import { useUserStore } from "@/store/userStore";
 
 const router = createRouter({
@@ -22,6 +24,11 @@ const router = createRouter({
 			component: LoginView,
 		},
 		{
+			path: "/register",
+			name: "register",
+			component: RegisterView,
+		},
+		{
 			path: "/services",
 			name: "services",
 			component: ServicesView,
@@ -35,6 +42,12 @@ const router = createRouter({
 			path: "/category/:id",
 			name: "category",
 			component: CategoryServicesView,
+			props: true,
+		},
+		{
+			path: "/service/:id",
+			name: "service-detail",
+			component: ServiceDetailView,
 			props: true,
 		},
 		{
@@ -55,6 +68,9 @@ const router = createRouter({
 // Navigation guard for protected routes
 router.beforeEach((to, from, next) => {
 	const userStore = useUserStore();
+
+	// Check token expiration on every navigation
+	userStore.checkTokenExpiration();
 
 	// Check if route requires authentication
 	if (to.matched.some((record) => record.meta.requiresAuth)) {

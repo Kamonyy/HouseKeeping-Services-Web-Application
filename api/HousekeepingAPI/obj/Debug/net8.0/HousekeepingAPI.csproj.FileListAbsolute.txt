@@ -251,7 +251,6 @@ d:\HouseKeeping\api\HousekeepingAPI\bin\Debug\net8.0\HousekeepingAPI.staticwebas
 d:\HouseKeeping\api\HousekeepingAPI\obj\Debug\net8.0\HousekeepingAPI.sourcelink.json
 d:\HouseKeeping\api\HousekeepingAPI\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 d:\HouseKeeping\api\HousekeepingAPI\obj\Debug\net8.0\staticwebassets\msbuild.HousekeepingAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-D:\HouseKeeping\api\HousekeepingAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\git\HouseKeeping\api\HousekeepingAPI\bin\Debug\net8.0\appsettings.Development.json
 D:\git\HouseKeeping\api\HousekeepingAPI\bin\Debug\net8.0\appsettings.json
 D:\git\HouseKeeping\api\HousekeepingAPI\bin\Debug\net8.0\HousekeepingAPI.exe
@@ -377,3 +376,4 @@ D:\git\HouseKeeping\api\HousekeepingAPI\obj\Debug\net8.0\refint\HousekeepingAPI.
 D:\git\HouseKeeping\api\HousekeepingAPI\obj\Debug\net8.0\HousekeepingAPI.pdb
 D:\git\HouseKeeping\api\HousekeepingAPI\obj\Debug\net8.0\HousekeepingAPI.genruntimeconfig.cache
 D:\git\HouseKeeping\api\HousekeepingAPI\obj\Debug\net8.0\ref\HousekeepingAPI.dll
+D:\HouseKeeping\api\HousekeepingAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

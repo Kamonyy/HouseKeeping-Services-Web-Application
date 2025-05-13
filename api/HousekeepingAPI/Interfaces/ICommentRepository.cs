@@ -12,5 +12,6 @@ namespace HousekeepingAPI.Interfaces
         Task<Comment> CreateAsync(CommentCreateDto commentDto, string userId);
         Task<bool> UpdateAsync(CommentUpdateDto commentDto);
         Task<bool> DeleteAsync(int id);
+        Task<double> GetAverageRatingForServiceAsync(int serviceId);
     }
 }

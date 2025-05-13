@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HousekeepingAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250501073754_Initial")]
-    partial class Initial
+    [Migration("20250507174017_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -135,6 +135,9 @@ namespace HousekeepingAPI.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
 
@@ -173,6 +176,9 @@ namespace HousekeepingAPI.Migrations
                     b.Property<decimal>("EstimatedPrice")
                         .HasColumnType("decimal(65,30)");
 
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -205,11 +211,11 @@ namespace HousekeepingAPI.Migrations
 
             modelBuilder.Entity("HousekeepingAPI.Models.SubCategory", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -218,7 +224,7 @@ namespace HousekeepingAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
@@ -253,19 +259,19 @@ namespace HousekeepingAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "212ceb29-7aa7-401e-8572-a118e9116445",
+                            Id = "ea3c139a-88c6-4369-ab2c-bc6513aad67d",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8e804485-b8c8-4ac6-b604-8a87d5e4f0d1",
+                            Id = "26429911-9032-4160-86a1-44aed1093b0e",
                             Name = "Provider",
                             NormalizedName = "PROVIDER"
                         },
                         new
                         {
-                            Id = "e259045b-fa02-4989-8936-0c276d3a8378",
+                            Id = "4259c0bd-1050-4a0c-8b3c-e3c165fb4848",
                             Name = "User",
                             NormalizedName = "USER"
                         });

@@ -3,28 +3,36 @@
   "WorkspaceRootPath": "D:\\HouseKeeping\\api\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\repository\\servicerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\repository\\servicerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\migrations\\20250507174017_new.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\migrations\\20250507174017_new.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\controllers\\subcategorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\controllers\\subcategorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\repository\\subcategoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\repository\\subcategoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\repository\\commentrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\repository\\commentrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\controllers\\servicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\controllers\\servicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\controllers\\commentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\controllers\\commentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\data\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\data\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|d:\\housekeeping\\api\\housekeepingapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE121672-4380-43EF-97A9-BC1AE82C9F3E}|HousekeepingAPI\\HousekeepingAPI.csproj|solutionrelative:housekeepingapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\HouseKeeping\\api\\HousekeepingAPI\\Migrations\\20250506115453_hh.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:HousekeepingAPI\\Migrations\\20250506115453_hh.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 302,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,80 +50,100 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SubCategoryController.cs",
-              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\SubCategoryController.cs",
-              "RelativeDocumentMoniker": "HousekeepingAPI\\Controllers\\SubCategoryController.cs",
-              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\SubCategoryController.cs",
-              "RelativeToolTip": "HousekeepingAPI\\Controllers\\SubCategoryController.cs",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAQwFEAAABdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-05T14:30:22.663Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "SubCategoryRepository.cs",
-              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Repository\\SubCategoryRepository.cs",
-              "RelativeDocumentMoniker": "HousekeepingAPI\\Repository\\SubCategoryRepository.cs",
-              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Repository\\SubCategoryRepository.cs",
-              "RelativeToolTip": "HousekeepingAPI\\Repository\\SubCategoryRepository.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAiwDoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-05T14:28:14.048Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ServiceRepository.cs",
-              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Repository\\ServiceRepository.cs",
-              "RelativeDocumentMoniker": "HousekeepingAPI\\Repository\\ServiceRepository.cs",
-              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Repository\\ServiceRepository.cs",
-              "RelativeToolTip": "HousekeepingAPI\\Repository\\ServiceRepository.cs",
-              "ViewState": "AgIAADoAAAAAAAAAAAAQwEsAAAA7AAAAAAAAAA==",
+              "Title": "20250507174017_new.cs",
+              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Migrations\\20250507174017_new.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Migrations\\20250507174017_new.cs",
+              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Migrations\\20250507174017_new.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Migrations\\20250507174017_new.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-05T14:24:37.571Z",
+              "WhenOpened": "2025-05-07T17:40:17.269Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AccountController.cs",
-              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\AccountController.cs",
-              "RelativeDocumentMoniker": "HousekeepingAPI\\Controllers\\AccountController.cs",
-              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "HousekeepingAPI\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAApAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "CommentRepository.cs",
+              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Repository\\CommentRepository.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Repository\\CommentRepository.cs",
+              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Repository\\CommentRepository.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Repository\\CommentRepository.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-05T08:16:35.341Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-07T17:06:44.872Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Controllers\\UserController.cs",
+              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\UserController.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Controllers\\UserController.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAowDQAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T11:55:40.969Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
+              "Title": "SeedData.cs",
+              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Data\\SeedData.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Data\\SeedData.cs",
+              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Data\\SeedData.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Data\\SeedData.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAAAEgAAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T12:01:00.468Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "20250506115453_hh.cs",
+              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Migrations\\20250506115453_hh.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Migrations\\20250506115453_hh.cs",
+              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Migrations\\20250506115453_hh.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Migrations\\20250506115453_hh.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T11:54:53.199Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Program.cs",
+              "RelativeDocumentMoniker": "HousekeepingAPI\\Program.cs",
+              "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Program.cs",
+              "RelativeToolTip": "HousekeepingAPI\\Program.cs",
+              "ViewState": "AgIAAGoAAAAAAAAAAAAQwHsAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T11:53:32.147Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "CommentController.cs",
               "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\CommentController.cs",
               "RelativeDocumentMoniker": "HousekeepingAPI\\Controllers\\CommentController.cs",
               "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\CommentController.cs",
               "RelativeToolTip": "HousekeepingAPI\\Controllers\\CommentController.cs",
-              "ViewState": "AgIAAE4AAAAAAAAAAAAQwFsAAABOAAAAAAAAAA==",
+              "ViewState": "AgIAAF4AAAAAAAAAAAAIwBAAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-02T08:15:21.067Z"
+              "WhenOpened": "2025-05-06T11:52:08.183Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "ServiceController.cs",
               "DocumentMoniker": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\ServiceController.cs",
               "RelativeDocumentMoniker": "HousekeepingAPI\\Controllers\\ServiceController.cs",
               "ToolTip": "D:\\HouseKeeping\\api\\HousekeepingAPI\\Controllers\\ServiceController.cs",
               "RelativeToolTip": "HousekeepingAPI\\Controllers\\ServiceController.cs",
-              "ViewState": "AgIAAHQAAAAAAAAAAAAAAIQAAABXAAAAAAAAAA==",
+              "ViewState": "AgIAAL4AAAAAAAAAAAAuwMUAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-26T11:45:17.606Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-06T11:52:08.489Z"
             }
           ]
         }

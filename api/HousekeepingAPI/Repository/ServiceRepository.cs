@@ -200,11 +200,50 @@ namespace HousekeepingAPI.Repository
 
         public async Task<bool> UpdateAsync(int id, UpdateServiceDto serviceDto)
         {
-            var service = await _context.Services.FindAsync(id);
-            if (service == null) return false;
+            var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var service = await _context.Services.FindAsync(id);
+                if (service == null) return false;
 
-            _mapper.Map(serviceDto, service);
-            return await _context.SaveChangesAsync() > 0;
+                // Update basic service properties
+                _mapper.Map(serviceDto, service);
+                
+                // Remove existing subcategory relationships
+                var existingRelationships = await _context.ServiceSubCategories
+                    .Where(ssc => ssc.ServiceId == id)
+                    .ToListAsync();
+                
+                _context.ServiceSubCategories.RemoveRange(existingRelationships);
+                await _context.SaveChangesAsync();
+                
+                // Add new subcategory relationships
+                var serviceSubCategories = serviceDto.SubCategoryIds.Select(subCatId => new ServiceSubCategory
+                {
+                    ServiceId = service.Id,
+                    SubCategoryId = subCatId
+                }).ToList();
+
+                await _context.ServiceSubCategories.AddRangeAsync(serviceSubCategories);
+                await _context.SaveChangesAsync();
+                
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                Console.WriteLine($"Error updating service: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                throw;
+            }
+            finally
+            {
+                if (transaction != null)
+                {
+                    await transaction.DisposeAsync();
+                }
+            }
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -238,10 +277,40 @@ namespace HousekeepingAPI.Repository
         public async Task<bool> RevokeServiceApprovalAsync(int id)
         {
             var service = await _context.Services.FindAsync(id);
-            if (service == null) return false;
-            
+            if (service == null)
+                return false;
+
             service.IsApproved = false;
+            _context.Update(service);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<(double Rating, int Count)> GetServiceRatingAsync(int serviceId)
+        {
+            var comments = await _context.Comments
+                .Where(c => c.ServiceId == serviceId && c.Rating > 0)
+                .ToListAsync();
+            
+            if (!comments.Any()) 
+                return (0, 0);
+            
+            double averageRating = comments.Average(c => c.Rating);
+            int ratingCount = comments.Count;
+            
+            return (averageRating, ratingCount);
+        }
+
+        public async Task<ICollection<ServiceListDto>> GetByCategoryIdAsync(int categoryId)
+        {
+            var services = await _context.Services
+                .Include(s => s.Provider)
+                .Include(s => s.ServiceSubCategory)
+                    .ThenInclude(ssc => ssc.SubCategory)
+                        .ThenInclude(sc => sc.Category)
+                .Where(s => s.ServiceSubCategory.Any(ssc => ssc.SubCategory.CategoryId == categoryId) && s.IsApproved)
+                .ToListAsync();
+
+            return _mapper.Map<List<ServiceListDto>>(services);
         }
     }
 }

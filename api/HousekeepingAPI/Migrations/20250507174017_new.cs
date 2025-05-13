@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HousekeepingAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class @new : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -234,7 +234,8 @@ namespace HousekeepingAPI.Migrations
                     EstimatedPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     ContactPhone = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsApproved = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -252,7 +253,7 @@ namespace HousekeepingAPI.Migrations
                 name: "SubCategories",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -260,7 +261,7 @@ namespace HousekeepingAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubCategories", x => x.id);
+                    table.PrimaryKey("PK_SubCategories", x => x.Id);
                     table.ForeignKey(
                         name: "FK_SubCategories_Categories_CategoryId",
                         column: x => x.CategoryId,
@@ -281,7 +282,8 @@ namespace HousekeepingAPI.Migrations
                     UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ServiceId = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -321,7 +323,7 @@ namespace HousekeepingAPI.Migrations
                         name: "FK_ServiceSubCategories_SubCategories_SubCategoryId",
                         column: x => x.SubCategoryId,
                         principalTable: "SubCategories",
-                        principalColumn: "id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -331,9 +333,9 @@ namespace HousekeepingAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "212ceb29-7aa7-401e-8572-a118e9116445", null, "Admin", "ADMIN" },
-                    { "8e804485-b8c8-4ac6-b604-8a87d5e4f0d1", null, "Provider", "PROVIDER" },
-                    { "e259045b-fa02-4989-8936-0c276d3a8378", null, "User", "USER" }
+                    { "26429911-9032-4160-86a1-44aed1093b0e", null, "Provider", "PROVIDER" },
+                    { "4259c0bd-1050-4a0c-8b3c-e3c165fb4848", null, "User", "USER" },
+                    { "ea3c139a-88c6-4369-ab2c-bc6513aad67d", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

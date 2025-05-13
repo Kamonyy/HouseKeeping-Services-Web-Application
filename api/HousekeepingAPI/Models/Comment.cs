@@ -7,6 +7,7 @@ namespace HousekeepingAPI.Models
         public string UserId { get; set; } = string.Empty;
         public int ServiceId { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public int Rating { get; set; } = 0;
 
         public virtual AppUser User { get; set; }
         public virtual Service Service { get; set; }

@@ -14,8 +14,14 @@ namespace HousekeepingAPI.Dto.Service
         public string ContactPhone { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public bool IsApproved { get; set; }
+        public string ProviderFirstName { get; set; } = string.Empty;
+        public string ProviderLastName { get; set; } = string.Empty;
         
         // Add missing SubCategories collection for frontend
         public List<ServiceSubCategoryDto> SubCategories { get; set; } = new List<ServiceSubCategoryDto>();
+        
+        // Rating properties
+        public double AverageRating { get; set; } = 0;
+        public int RatingCount { get; set; } = 0;
     }
 }

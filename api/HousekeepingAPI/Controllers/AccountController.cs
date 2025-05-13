@@ -44,6 +44,8 @@ namespace HousekeepingAPI.Controllers
                 {
                     UserName = user.UserName,
                     Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
                     Token = _tokenService.CreateToken(user)
                 }
             );
@@ -61,6 +63,8 @@ namespace HousekeepingAPI.Controllers
                 {
                     UserName = registerDto.Username,
                     Email = registerDto.Email,
+                    FirstName = registerDto.FirstName,
+                    LastName = registerDto.LastName
                 };
 
                 var createdUser = await _userManger.CreateAsync(appUser, registerDto.Password);
@@ -75,6 +79,8 @@ namespace HousekeepingAPI.Controllers
                             {
                                 UserName = appUser.UserName,
                                 Email = appUser.Email,
+                                FirstName = appUser.FirstName,
+                                LastName = appUser.LastName,
                                 Token = _tokenService.CreateToken(appUser)
                             }
                         );

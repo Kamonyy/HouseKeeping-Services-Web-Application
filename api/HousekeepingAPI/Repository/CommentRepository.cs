@@ -21,7 +21,6 @@ namespace HousekeepingAPI.Repository
         {
             return await _context.Comments
                 .Include(c => c.User)
-                .Include(c => c.Service)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
@@ -40,7 +39,8 @@ namespace HousekeepingAPI.Repository
                 Content = commentDto.Content,
                 UserId = userId,
                 ServiceId = commentDto.ServiceId,
-                CreatedDate = DateTime.UtcNow
+                CreatedDate = DateTime.UtcNow,
+                Rating = commentDto.Rating
             };
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
@@ -55,6 +55,7 @@ namespace HousekeepingAPI.Repository
             comment.Content = commentDto.Content;
             comment.UserId = commentDto.UserId;
             comment.ServiceId = commentDto.ServiceId;
+            comment.Rating = commentDto.Rating;
 
             _context.Comments.Update(comment);
             return await _context.SaveChangesAsync() > 0;
@@ -67,6 +68,17 @@ namespace HousekeepingAPI.Repository
 
             _context.Comments.Remove(comment);
             return await _context.SaveChangesAsync() > 0;
+        }
+        
+        public async Task<double> GetAverageRatingForServiceAsync(int serviceId)
+        {
+            var comments = await _context.Comments
+                .Where(c => c.ServiceId == serviceId && c.Rating > 0)
+                .ToListAsync();
+                
+            if (!comments.Any()) return 0;
+            
+            return comments.Average(c => c.Rating);
         }
     }
 }

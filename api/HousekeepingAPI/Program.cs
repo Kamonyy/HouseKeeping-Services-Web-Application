@@ -32,6 +32,8 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.MaxDepth = 64;
         // Don't write null values to reduce response size
         options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+        // Make JSON property name matching case-insensitive
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();

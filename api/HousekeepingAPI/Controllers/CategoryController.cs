@@ -51,8 +51,8 @@ namespace HousekeepingAPI.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto categoryDto)
         {
-            if (categoryDto == null || string.IsNullOrEmpty(categoryDto.Name))
-                return BadRequest("Invalid data.");
+            if (categoryDto == null || string.IsNullOrWhiteSpace(categoryDto.Name))
+                return BadRequest("Invalid data. Category name cannot be empty.");
 
             var category = new Category
             {
@@ -74,7 +74,7 @@ namespace HousekeepingAPI.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDto categoryDto)
         {
-            if (categoryDto == null || string.IsNullOrEmpty(categoryDto.Name))
+            if (categoryDto == null || string.IsNullOrWhiteSpace(categoryDto.Name))
                 return BadRequest("Invalid data provided.");
 
             var existingCategory = await _categoryRepository.GetByIdAsync(id);

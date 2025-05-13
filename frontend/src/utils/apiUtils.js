@@ -47,11 +47,13 @@ export const extractArrayFromResponse = (responseData, label = "items") => {
  * Extracts the token from different login response formats
  * @param {any} responseData - The data received from a login API call
  * @param {string} defaultUsername - The username to use if not found in the response
- * @returns {Object} - Object containing extracted username and token
+ * @returns {Object} - Object containing extracted username, token, firstName, and lastName
  */
 export const extractAuthFromResponse = (responseData, defaultUsername) => {
 	let username = defaultUsername;
 	let token = null;
+	let firstName = "";
+	let lastName = "";
 
 	if (typeof responseData === "string") {
 		// If the response is just a token string
@@ -61,9 +63,24 @@ export const extractAuthFromResponse = (responseData, defaultUsername) => {
 		token = responseData.token || responseData.accessToken || responseData.jwt;
 		username =
 			responseData.username || responseData.userName || defaultUsername;
+
+		// Extract first and last name with fallbacks for different case formats
+		firstName =
+			responseData.firstName ||
+			responseData.FirstName ||
+			responseData.firstname ||
+			responseData.first_name ||
+			"";
+
+		lastName =
+			responseData.lastName ||
+			responseData.LastName ||
+			responseData.lastname ||
+			responseData.last_name ||
+			"";
 	}
 
-	return { username, token };
+	return { username, token, firstName, lastName };
 };
 
 /**

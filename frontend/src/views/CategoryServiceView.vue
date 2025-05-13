@@ -1,6 +1,6 @@
 <!-- CategoryServicesView.vue -->
 <script setup>
-	import { ref, onMounted } from "vue";
+	import { ref, onMounted, watch } from "vue";
 	import { useRoute, useRouter } from "vue-router";
 	import axios from "axios";
 	import { extractArrayFromResponse } from "../utils/apiUtils";
@@ -18,6 +18,26 @@
 	const fadeOutServices = ref(false);
 	const previousSubCategoryId = ref(null);
 	const isFolded = ref(true);
+	const searchQuery = ref("");
+	const filteredServices = ref([]);
+
+	// Filter services based on search query
+	watch(searchQuery, () => {
+		if (!servicesBySubCategory.value.length) return;
+
+		if (!searchQuery.value.trim()) {
+			filteredServices.value = servicesBySubCategory.value;
+			return;
+		}
+
+		const query = searchQuery.value.toLowerCase().trim();
+		filteredServices.value = servicesBySubCategory.value.filter((service) => {
+			return (
+				service.title?.toLowerCase().includes(query) ||
+				service.description?.toLowerCase().includes(query)
+			);
+		});
+	});
 
 	// Fetch subcategories for the category
 	const fetchSubCategories = async () => {
@@ -70,6 +90,7 @@
 		showServicesSection.value = false;
 		fadeOutServices.value = false;
 		isFolded.value = false;
+		searchQuery.value = ""; // Reset search query for new subcategory
 
 		// Reset to top of page smoothly if not visible in viewport
 		const subCategoryEl = document.querySelector(
@@ -97,6 +118,9 @@
 				"services"
 			);
 
+			// Set filtered services initially to all services
+			filteredServices.value = servicesBySubCategory.value;
+
 			// Small delay to ensure animation feels natural
 			setTimeout(() => {
 				showServicesSection.value = true;
@@ -108,6 +132,7 @@
 				error
 			);
 			servicesBySubCategory.value = [];
+			filteredServices.value = [];
 
 			// Show empty state with animation too
 			setTimeout(() => {
@@ -139,517 +164,416 @@
 		router.push(`/service/${serviceId}`);
 	};
 
+	const goBack = () => {
+		router.back();
+	};
+
 	onMounted(() => {
 		fetchSubCategories();
 	});
+
+	// Function to get appropriate image based on service title/category
+	const getServiceImage = (service) => {
+		const title = service.title?.toLowerCase() || "";
+		const category = service.category?.toLowerCase() || "";
+
+		// Cleaning services
+		if (
+			title.includes("تنظيف") ||
+			title.includes("نظافة") ||
+			category.includes("تنظيف") ||
+			category.includes("نظافة")
+		) {
+			return "https://images.pexels.com/photos/4239091/pexels-photo-4239091.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+		}
+
+		// Electrical services
+		if (
+			title.includes("كهرباء") ||
+			title.includes("كهربائية") ||
+			category.includes("كهرباء")
+		) {
+			return "https://images.pexels.com/photos/4491881/pexels-photo-4491881.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+		}
+
+		// Plumbing services
+		if (
+			title.includes("سباكة") ||
+			title.includes("مياه") ||
+			category.includes("سباكة")
+		) {
+			return "https://images.pexels.com/photos/6419146/pexels-photo-6419146.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+		}
+
+		// Carpentry services
+		if (
+			title.includes("نجارة") ||
+			title.includes("خشب") ||
+			category.includes("نجارة")
+		) {
+			return "https://images.pexels.com/photos/6969866/pexels-photo-6969866.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+		}
+
+		// Painting services
+		if (
+			title.includes("دهان") ||
+			title.includes("طلاء") ||
+			category.includes("دهان")
+		) {
+			return "https://images.pexels.com/photos/5591144/pexels-photo-5591144.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+		}
+
+		// AC services
+		if (
+			title.includes("تكييف") ||
+			title.includes("مكيف") ||
+			category.includes("تكييف")
+		) {
+			return "https://images.pexels.com/photos/4489732/pexels-photo-4489732.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+		}
+
+		// Gardening services
+		if (
+			title.includes("حدائق") ||
+			title.includes("حديقة") ||
+			category.includes("حدائق")
+		) {
+			return "https://images.pexels.com/photos/4503751/pexels-photo-4503751.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+		}
+
+		// Moving services
+		if (
+			title.includes("نقل") ||
+			title.includes("تحريك") ||
+			category.includes("نقل")
+		) {
+			return "https://images.pexels.com/photos/4246120/pexels-photo-4246120.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+		}
+
+		// Default image if no match - use service ID to get some variety
+		const defaultImages = [
+			"https://images.pexels.com/photos/4108840/pexels-photo-4108840.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+			"https://images.pexels.com/photos/4108718/pexels-photo-4108718.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+			"https://images.pexels.com/photos/4108765/pexels-photo-4108765.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+			"https://images.pexels.com/photos/3747463/pexels-photo-3747463.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+		];
+
+		// Use service ID to select an image, or fallback to first image
+		if (service.id && defaultImages.length > 0) {
+			const index = service.id % defaultImages.length;
+			return defaultImages[index];
+		}
+
+		return defaultImages[0];
+	};
 </script>
 
 <template>
-	<div class="container mx-auto px-4 py-8 animate-fadeIn">
-		<!-- Header Section -->
-		<header class="text-center mb-8 relative">
-			<div class="static-glow"></div>
+	<div class="container mx-auto px-4 py-6">
+		<!-- Back button and heading -->
+		<div class="flex items-center justify-between mb-6 rtl">
+			<button
+				@click="goBack"
+				class="px-4 py-2 rounded-lg flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 shadow-sm"
+			>
+				<i class="fas fa-arrow-left rtl:rotate-180"></i>
+				<span>العودة</span>
+			</button>
+
 			<h1
-				class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-blue-500 mb-4"
+				class="text-2xl font-bold text-primary drop-shadow-sm"
+				style="text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1)"
 			>
 				{{ categoryName || "الخدمات المتوفرة" }}
 			</h1>
-			<p class="text-gray-600 max-w-3xl mx-auto">
-				اختر الخدمة الفرعية التي تناسب احتياجاتك من القائمة أدناه
-			</p>
-		</header>
+		</div>
 
 		<!-- SubCategories Section -->
-		<section class="relative mb-12">
-			<h2
-				class="text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 mb-6 text-right subcategories-header"
-			>
-				التصنيفات الفرعية
-			</h2>
-			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 rtl">
+		<section class="mb-10">
+			<div class="flex items-center justify-between mb-5 rtl">
+				<h2 class="text-xl font-bold text-primary">التصنيفات الفرعية</h2>
+				<span
+					class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-bold"
+					>{{ subCategories.length }}</span
+				>
+			</div>
+
+			<!-- SubCategory Cards -->
+			<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 rtl">
 				<div
-					v-for="subCategory in subCategories"
+					v-for="(subCategory, index) in subCategories"
 					:key="subCategory.id"
 					@click="fetchServicesBySubCategory(subCategory.id)"
-					class="fancy-card subcategory h-72 rounded-xl overflow-hidden transition-all duration-500 shadow-fancy hover:shadow-fancy-hover cursor-pointer flex flex-col"
+					class="category-card rounded-lg shadow-md overflow-hidden cursor-pointer border transition-all duration-200 hover:shadow-lg"
 					:class="{
-						'selected-subcategory':
+						'border-blue-500 ring-2 ring-blue-200':
 							selectedSubCategory && selectedSubCategory.id === subCategory.id,
-						folded:
-							selectedSubCategory &&
-							selectedSubCategory.id === subCategory.id &&
-							isFolded,
+						'border-gray-200':
+							!selectedSubCategory || selectedSubCategory.id !== subCategory.id,
 						[`subcategory-${subCategory.id}`]: true,
 					}"
-					:data-id="subCategory.id"
 				>
 					<!-- SubCategory Image -->
-					<div class="relative overflow-hidden h-44">
-						<!-- Glass border overlay -->
-						<div class="fancy-glass-border"></div>
-
+					<div class="relative h-28">
 						<img
 							src="@/img/cleaning.jpg"
 							:alt="subCategory.name"
-							class="w-full h-full object-cover transition-all duration-700 hover:scale-110 fancy-image"
+							class="w-full h-full object-cover"
 						/>
 						<div
-							class="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-black/30 to-transparent"
+							class="absolute inset-0 bg-gradient-to-t from-blue-900/95 via-blue-800/70 to-transparent"
 						></div>
 
-						<!-- Fold/Unfold indicator -->
+						<!-- SubCategory Name -->
+						<div class="absolute bottom-0 left-0 right-0 p-3">
+							<h3
+								class="text-white font-bold text-lg drop-shadow-lg"
+								style="text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5)"
+							>
+								{{ subCategory.name }}
+							</h3>
+						</div>
+
+						<!-- Selection indicator -->
 						<div
 							v-if="
 								selectedSubCategory && selectedSubCategory.id === subCategory.id
 							"
-							class="absolute bottom-3 right-3 w-9 h-9 fancy-button flex items-center justify-center transition-all duration-300 z-10"
-							:class="{ 'rotate-180': !isFolded }"
+							class="absolute top-2 left-2 bg-blue-500 h-6 w-6 rounded-full flex items-center justify-center"
 						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="2.5"
-								stroke="currentColor"
-								class="w-5 h-5 text-white"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-								/>
-							</svg>
+							<i class="fas fa-check text-white text-xs"></i>
 						</div>
-					</div>
-					<!-- SubCategory Content -->
-					<div class="p-5 relative bg-white flex-grow flex flex-col">
-						<div class="flex-grow">
-							<p
-								class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-blue-500 text-center mb-3"
-							>
-								{{ subCategory.name }}
-							</p>
-							<div class="flex justify-center">
-								<span
-									class="inline-block bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold shadow-sm"
-								>
-									عرض الخدمات
-								</span>
-							</div>
-						</div>
-						<div class="fancy-glow"></div>
 					</div>
 				</div>
 			</div>
 
-			<div v-if="subCategories.length === 0" class="text-center py-8">
-				<p class="text-gray-500 text-lg">لا توجد تصنيفات فرعية متاحة حالياً</p>
+			<div
+				v-if="subCategories.length === 0"
+				class="text-center py-8 bg-gray-50 rounded-lg border mt-4"
+			>
+				<p class="text-gray-600">لا توجد تصنيفات فرعية متاحة حالياً</p>
 			</div>
 		</section>
 
 		<!-- Selected SubCategory Services Section -->
 		<section
 			v-if="selectedSubCategory"
-			class="relative mt-12 services-section"
+			class="services-section"
 			:class="{
 				'show-services': showServicesSection,
 				'fade-out-services': fadeOutServices,
 			}"
 		>
-			<h2
-				class="text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 mb-6 text-right flex items-center justify-between"
-			>
-				<span>{{ selectedSubCategory.name }}</span>
-				<span class="text-sm text-gray-500"
-					>{{ servicesBySubCategory.length }} خدمة متاحة</span
-				>
-			</h2>
-
-			<!-- Loading indicator -->
-			<div v-if="isLoading" class="flex justify-center py-12 animate-fadeIn">
-				<div class="fancy-spinner"></div>
-			</div>
-
+			<!-- Services header with search -->
 			<div
-				v-else
-				class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 rtl services-grid"
+				class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6"
 			>
 				<div
-					v-for="(service, index) in servicesBySubCategory"
-					:key="service.id"
-					@click="navigateToService(service.id)"
-					class="fancy-service-card h-[430px] rounded-xl overflow-hidden transition-all duration-500 cursor-pointer shadow-fancy hover:shadow-fancy-hover flex flex-col transform perspective-card"
-					:style="{ 'animation-delay': `${index * 0.1}s` }"
+					class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between rtl"
 				>
-					<!-- Card inner container with 3D effect -->
-					<div class="card-inner w-full h-full">
-						<!-- Glass border overlay -->
-						<div class="fancy-glass-border"></div>
-						<!-- Service Image -->
-						<div class="relative overflow-hidden h-44">
-							<img
-								src="@/img/cleaning.jpg"
-								:alt="service.title"
-								class="w-full h-full object-cover transition-all duration-700 hover:scale-110 fancy-image"
-							/>
-							<div
-								class="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-black/30 to-transparent"
-							></div>
-
-							<!-- Service badge -->
-							<div
-								class="absolute top-3 right-3 bg-gradient-to-r from-blue-600 to-blue-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg"
-							>
-								خدمة
-							</div>
+					<div class="flex items-center gap-2">
+						<i class="fas fa-layer-group text-primary"></i>
+						<div>
+							<h2 class="text-xl font-bold text-primary">
+								{{ selectedSubCategory.name }}
+							</h2>
+							<p class="text-color-medium text-sm">
+								{{ servicesBySubCategory.length }} خدمة متاحة
+							</p>
 						</div>
+					</div>
 
-						<!-- Service Content -->
-						<div class="p-5 relative flex-grow flex flex-col bg-white/95">
-							<div class="flex-grow">
-								<p
-									class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-blue-500 mb-3 line-clamp-2"
-								>
-									{{ service.title }}
-								</p>
-								<div class="flex items-center mb-3">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-4 w-4 text-blue-500 ml-1"
-										viewBox="0 0 20 20"
-										fill="currentColor"
-									>
-										<path
-											fill-rule="evenodd"
-											d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-											clip-rule="evenodd"
-										/>
-									</svg>
-									<span class="text-gray-600 text-sm ml-1">بواسطة:</span>
-									<span class="font-medium text-blue-500 text-sm">{{
-										service.providerUsername
-									}}</span>
-								</div>
-								<p
-									v-if="service.description"
-									class="text-gray-700 text-sm mb-4 line-clamp-3"
-								>
-									{{ service.description }}
-								</p>
-							</div>
-
-							<div class="mt-auto">
-								<div
-									v-if="service.estimatedPrice"
-									class="flex justify-between items-center mb-4"
-								>
-									<span class="text-sm text-gray-600">السعر التقريبي:</span>
-									<span
-										class="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-green-400"
-									>
-										{{ service.estimatedPrice }} IQD
-									</span>
-								</div>
-
-								<button
-									class="fancy-button-gradient w-full py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center"
-								>
-									<span>عرض التفاصيل</span>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 mr-2 rtl:rotate-180"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M9 5l7 7-7 7"
-										/>
-									</svg>
-								</button>
-							</div>
-							<div class="fancy-glow"></div>
+					<!-- Search Bar -->
+					<div class="relative w-full sm:w-auto">
+						<input
+							type="text"
+							v-model="searchQuery"
+							class="w-full sm:w-60 bg-gray-50 border border-gray-300 text-gray-900 rounded-lg pl-10 pr-4 py-2 focus:ring-blue-500 focus:border-blue-500"
+							placeholder="ابحث عن خدمة..."
+						/>
+						<div
+							class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+						>
+							<i class="fas fa-search text-gray-400"></i>
 						</div>
 					</div>
 				</div>
+			</div>
 
+			<!-- Loading indicator -->
+			<div v-if="isLoading" class="flex justify-center py-8">
+				<div class="spinner"></div>
+			</div>
+
+			<!-- Service Cards -->
+			<div
+				v-else
+				class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 rtl"
+			>
+				<div
+					v-for="(service, index) in filteredServices"
+					:key="service.id"
+					@click="navigateToService(service.id)"
+					class="service-card rounded-lg shadow-md overflow-hidden cursor-pointer border border-gray-200 bg-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+				>
+					<!-- Service Image -->
+					<div class="relative h-36">
+						<img
+							:src="getServiceImage(service)"
+							:alt="service.title"
+							class="w-full h-full object-cover"
+						/>
+
+						<!-- Price badge if available -->
+						<div
+							v-if="service.estimatedPrice"
+							class="absolute bottom-2 left-2 bg-green-500 text-white px-2 py-1 rounded-md text-sm font-medium"
+						>
+							{{ service.estimatedPrice }} IQD
+						</div>
+
+						<!-- Rating badge -->
+						<div
+							v-if="service.averageRating > 0"
+							class="absolute top-2 left-2 bg-blue-600/90 backdrop-blur-sm text-white px-2 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1 shadow-sm"
+						>
+							<span class="font-bold">{{
+								service.averageRating?.toFixed(1)
+							}}</span>
+							<i class="fas fa-star text-yellow-300 text-xs"></i>
+							<span class="text-xs text-white/80"
+								>({{ service.ratingCount || 0 }})</span
+							>
+						</div>
+					</div>
+
+					<!-- Service Content -->
+					<div class="p-4">
+						<h3
+							class="text-lg font-bold text-primary mb-2 line-clamp-2 hover:text-primary-dark transition-colors"
+							style="text-shadow: 0 0.5px 0 rgba(0, 0, 0, 0.05)"
+						>
+							{{ service.title }}
+						</h3>
+
+						<div class="flex items-center justify-between mb-2">
+							<div class="text-sm text-color-medium flex items-center">
+								<i class="fas fa-user text-primary mr-2"></i>
+								{{
+									service.providerFirstName || service.providerLastName
+										? `${service.providerFirstName} ${service.providerLastName}`.trim()
+										: service.providerUsername
+								}}
+							</div>
+						</div>
+
+						<p
+							v-if="service.description"
+							class="text-color-dark text-sm mb-3 line-clamp-2 font-medium"
+						>
+							{{ service.description }}
+						</p>
+
+						<button
+							class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors flex items-center justify-center gap-2"
+						>
+							<span>عرض التفاصيل</span>
+							<i class="fas fa-arrow-left text-xs"></i>
+						</button>
+					</div>
+				</div>
+
+				<!-- Empty search results -->
+				<div
+					v-if="
+						searchQuery &&
+						filteredServices.length === 0 &&
+						servicesBySubCategory.length > 0
+					"
+					class="col-span-full text-center py-8 bg-gray-50 rounded-lg border"
+				>
+					<i class="fas fa-search text-blue-500 text-2xl mb-2"></i>
+					<p class="text-gray-600">
+						لم يتم العثور على نتائج لـ "{{ searchQuery }}"
+					</p>
+				</div>
+
+				<!-- No services -->
 				<div
 					v-if="servicesBySubCategory.length === 0"
-					class="col-span-full text-center py-8 animate-fadeIn"
+					class="col-span-full text-center py-8 bg-gray-50 rounded-lg border"
 				>
-					<p class="text-gray-500 text-lg">
-						لا توجد خدمات متاحة في هذا التصنيف حالياً
-					</p>
+					<i class="fas fa-info-circle text-blue-500 text-2xl mb-2"></i>
+					<p class="text-gray-600">لا توجد خدمات متاحة في هذا التصنيف حالياً</p>
 				</div>
 			</div>
 		</section>
+
+		<!-- Back to top button (only show when scrolled down) -->
+		<button
+			@click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+			class="fixed bottom-4 right-4 z-30 bg-blue-600 text-white w-10 h-10 rounded-full shadow flex items-center justify-center hover:bg-blue-700"
+		>
+			<i class="fas fa-arrow-up"></i>
+		</button>
 	</div>
 </template>
 
 <style scoped>
-	.shadow-fancy {
-		box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.15),
-			0 8px 10px -6px rgba(59, 130, 246, 0.1), 0 0 0 1px rgba(59, 130, 246, 0.1);
-	}
-
-	.shadow-fancy-hover {
-		box-shadow: 0 20px 35px -10px rgba(59, 130, 246, 0.25),
-			0 10px 15px -3px rgba(59, 130, 246, 0.15),
-			0 0 0 2px rgba(59, 130, 246, 0.2);
-	}
-
-	.fancy-card {
-		position: relative;
-		transform: translateY(0);
-		border: none;
-		background: linear-gradient(to bottom, #ffffff, #f9fafb);
-	}
-
-	.fancy-card:hover {
-		transform: translateY(-6px) scale(1.02);
-	}
-
-	.fancy-service-card {
-		position: relative;
-		transform: translateY(0);
-		border: none;
-		background: linear-gradient(to bottom, #ffffff, #f9fafb);
-	}
-
-	.fancy-service-card:hover {
-		transform: translateY(-6px) scale(1.02);
-	}
-
-	.perspective-card {
-		transform-style: preserve-3d;
-		perspective: 1000px;
-	}
-
-	.card-inner {
-		position: relative;
-		transition: transform 0.6s;
-	}
-
-	.fancy-card:hover .fancy-image,
-	.fancy-service-card:hover .fancy-image {
-		transform: scale(1.1);
-	}
-
-	.fancy-glass-border {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		z-index: 5;
-		pointer-events: none;
-		border-radius: inherit;
-		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
-	}
-
-	.fancy-overlay {
-		z-index: 2;
-		opacity: 1;
-		transition: all 0.5s ease;
-	}
-
-	.fancy-card:hover .fancy-overlay,
-	.fancy-service-card:hover .fancy-overlay {
-		background: linear-gradient(
-			to top,
-			rgba(37, 99, 235, 0.85),
-			rgba(0, 0, 0, 0.4),
-			rgba(0, 0, 0, 0.2)
-		);
-	}
-
-	.fancy-title {
-		transform: translateY(0);
-		transition: transform 0.5s ease;
-	}
-
-	.fancy-card:hover .fancy-title,
-	.fancy-service-card:hover .fancy-title {
-		transform: translateY(-5px) scale(1.05);
-	}
-
-	.fancy-button {
-		background: linear-gradient(145deg, #3b82f6, #2563eb);
-		border-radius: 50%;
-		box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4),
-			0 0 0 2px rgba(255, 255, 255, 0.2);
-		transition: all 0.3s ease;
-	}
-
-	.fancy-button:hover {
-		box-shadow: 0 6px 15px rgba(37, 99, 235, 0.5),
-			0 0 0 3px rgba(255, 255, 255, 0.3);
+	/* Basic styles for cards */
+	.category-card:hover {
 		transform: translateY(-2px);
 	}
 
-	.fancy-button-gradient {
-		background: linear-gradient(135deg, #3b82f6, #2563eb);
-		color: white;
-		font-weight: 600;
-		border: none;
-		position: relative;
-		overflow: hidden;
+	.service-card:hover {
+		transform: translateY(-2px);
 	}
 
-	.fancy-button-gradient::before {
-		content: "";
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: linear-gradient(
-			135deg,
-			transparent,
-			rgba(255, 255, 255, 0.2),
-			transparent
-		);
-		transition: transform 0.5s ease;
-		transform: translateX(-100%);
-	}
-
-	.fancy-button-gradient:hover::before {
-		transform: translateX(100%);
-	}
-
-	.drop-shadow-glow {
-		filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
-	}
-
-	.fancy-glow {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: radial-gradient(
-			circle at center,
-			rgba(59, 130, 246, 0.08) 0%,
-			transparent 70%
-		);
-		opacity: 0;
-		pointer-events: none;
-		z-index: 0;
-		transition: opacity 0.5s ease;
-	}
-
-	div:hover .fancy-glow {
-		opacity: 1;
-	}
-
-	.static-glow {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: radial-gradient(
-			circle at center,
-			rgba(59, 130, 246, 0.05) 0%,
-			transparent 70%
-		);
-		opacity: 0.8;
-		pointer-events: none;
-		z-index: -1;
-	}
-
-	.selected-subcategory {
-		border-color: #3b82f6;
-		box-shadow: 0 15px 35px rgba(59, 130, 246, 0.25),
-			0 10px 15px rgba(59, 130, 246, 0.15), 0 0 0 2px rgba(59, 130, 246, 0.3);
-		position: relative;
-		z-index: 1;
-		transform: translateY(-5px) scale(1.02);
-	}
-
-	.selected-subcategory::after {
-		content: "";
-		position: absolute;
-		bottom: -12px;
-		left: 50%;
-		transform: translateX(-50%);
-		width: 0;
-		height: 0;
-		border-left: 12px solid transparent;
-		border-right: 12px solid transparent;
-		border-top: 12px solid #3b82f6;
-		opacity: 0;
-		transition: opacity 0.3s ease;
-		filter: drop-shadow(0 5px 5px rgba(59, 130, 246, 0.2));
-	}
-
-	.selected-subcategory:not(.folded)::after {
-		opacity: 1;
-	}
-
-	.fancy-spinner {
-		width: 50px;
-		height: 50px;
-		border-radius: 50%;
-		background: conic-gradient(#0000 10%, #3b82f6);
-		-webkit-mask: radial-gradient(
-			farthest-side,
-			#0000 calc(100% - 8px),
-			#000 0
-		);
-		animation: fancy-spin 1s infinite linear;
-	}
-
-	@keyframes fancy-spin {
-		to {
-			transform: rotate(1turn);
-		}
-	}
-
-	/* Services section animations */
+	/* Services section animations - simplified */
 	.services-section {
 		opacity: 0;
-		transform: translateY(20px);
-		transition: opacity 0.5s ease, transform 0.5s ease;
-		overflow: hidden;
-		max-height: 0;
+		transition: opacity 0.3s ease;
 	}
 
 	.services-section.show-services {
 		opacity: 1;
-		transform: translateY(0);
-		max-height: 5000px;
-		transition: opacity 0.5s ease, transform 0.5s ease, max-height 0.8s ease;
 	}
 
 	.services-section.fade-out-services {
 		opacity: 0;
-		transform: translateY(10px);
-		transition: opacity 0.3s ease, transform 0.3s ease;
 	}
 
-	.service-card {
-		opacity: 0;
-		transform: translateY(20px);
-		animation: slideUpFadeIn 0.5s forwards;
+	/* Spinner */
+	.spinner {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		border: 3px solid rgba(59, 130, 246, 0.1);
+		border-top-color: #3b82f6;
+		animation: spin 1s linear infinite;
 	}
 
-	.services-grid {
-		perspective: 1200px;
-	}
-
-	@keyframes slideUpFadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(20px) scale(0.95);
-		}
+	@keyframes spin {
 		to {
-			opacity: 1;
-			transform: translateY(0) scale(1);
+			transform: rotate(360deg);
 		}
+	}
+
+	/* Text truncation */
+	.line-clamp-2 {
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.drop-shadow-lg {
+		filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.3));
+	}
+
+	.rtl {
+		direction: rtl;
+		text-align: right;
 	}
 
 	@keyframes fadeIn {
@@ -667,17 +591,27 @@
 		animation: fadeIn 0.8s ease-out;
 	}
 
-	.line-clamp-2 {
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+	/* Color variables */
+	.text-primary {
+		color: var(--color-primary) !important;
 	}
 
-	.line-clamp-3 {
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+	.text-primary-dark {
+		color: var(--color-primary-dark) !important;
+	}
+
+	.text-color-medium {
+		color: var(--color-gray-600) !important;
+	}
+
+	.text-color-dark {
+		color: var(--color-gray-800) !important;
+	}
+
+	/* Make subcategory and service titles white */
+	h3 {
+		color: white !important;
+		font-weight: 700;
+		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 	}
 </style>

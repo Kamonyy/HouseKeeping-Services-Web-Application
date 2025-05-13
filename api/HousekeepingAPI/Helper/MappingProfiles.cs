@@ -13,6 +13,8 @@ namespace HousekeepingAPI.Helper
         {
             CreateMap<Models.Service, ServiceListDto>()
                 .ForMember(dest => dest.ProviderUsername, opt => opt.MapFrom(src => src.Provider.UserName))
+                .ForMember(dest => dest.ProviderFirstName, opt => opt.MapFrom(src => src.Provider.FirstName))
+                .ForMember(dest => dest.ProviderLastName, opt => opt.MapFrom(src => src.Provider.LastName))
                 .ForMember(dest => dest.SubCategories, opt => opt.MapFrom(src => src.ServiceSubCategory.Select(ssc =>
                     new ServiceSubCategoryDto
                     {
@@ -27,6 +29,8 @@ namespace HousekeepingAPI.Helper
             CreateMap<Models.Service, ServiceDetailsDto>()
                 .ForMember(dest => dest.ProviderId, opt => opt.MapFrom(src => src.UserId))
                 .ForMember(dest => dest.ProviderUsername, opt => opt.MapFrom(src => src.Provider.UserName))
+                .ForMember(dest => dest.ProviderFirstName, opt => opt.MapFrom(src => src.Provider.FirstName))
+                .ForMember(dest => dest.ProviderLastName, opt => opt.MapFrom(src => src.Provider.LastName))
                 .ForMember(dest => dest.SubCategories, opt => opt.MapFrom(src => src.ServiceSubCategory.Select(ssc =>
                     new ServiceSubCategoryDto
                     {
@@ -39,6 +43,10 @@ namespace HousekeepingAPI.Helper
                     })));
 
             CreateMap<Models.Service, CreateServiceDto>().ReverseMap();
+
+            // Add mapping for UpdateServiceDto to Service
+            CreateMap<UpdateServiceDto, Models.Service>()
+                .ForMember(dest => dest.ServiceSubCategory, opt => opt.Ignore());
 
             // SubCategory Mappings
             CreateMap<SubCategory, SubCategoryDto>()
@@ -53,6 +61,11 @@ namespace HousekeepingAPI.Helper
                 .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => DateTime.UtcNow));
 
             CreateMap<CommentUpdateDto, Models.Comment>();
+
+            CreateMap<Comment, CommentDto>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
+                .ForMember(dest => dest.UserFirstName, opt => opt.MapFrom(src => src.User.FirstName))
+                .ForMember(dest => dest.UserLastName, opt => opt.MapFrom(src => src.User.LastName));
         }
     }
 }

@@ -2,51 +2,72 @@
 	import { RouterView } from "vue-router";
 	import Nav from "@/components/Nav.vue";
 	import Footer from "@/components/Footer.vue";
+	import ToastContainer from "./components/ToastContainer.vue";
+	import ScrollProgressBar from "./components/ScrollProgressBar.vue";
+	import GlobalStyles from "./components/GlobalStyles.vue";
 </script>
 
 <template>
-	<div class="layout">
-		<header>
+	<div class="app-layout">
+		<GlobalStyles />
+		<ScrollProgressBar />
+		<header class="app-header">
 			<Nav />
 		</header>
-		<main>
+		<ToastContainer />
+		<main class="app-main">
 			<RouterView v-slot="{ Component }">
-				<Transition name="scale" mode="out-in">
-					<component :is="Component" />
+				<Transition name="page-transition" mode="out-in">
+					<component :is="Component" :key="$route.path" />
 				</Transition>
 			</RouterView>
 		</main>
-		<Footer />
+		<Footer class="app-footer" />
 	</div>
 </template>
 
-<style scoped>
-	.layout {
+<style>
+	.app-layout {
 		display: flex;
 		flex-direction: column;
 		min-height: 100vh;
+		background-color: var(--color-gray-50);
 	}
 
-	header {
+	.app-header {
 		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 100;
 	}
 
-	main {
+	.app-main {
 		flex: 1;
+		padding: 1rem 0;
+		margin-bottom: 2rem;
+		position: relative;
+		z-index: 50;
 	}
 
-	footer {
+	.app-footer {
 		width: 100%;
+		margin-top: auto;
 	}
 
-	.scale-enter-active,
-	.scale-leave-active {
-		transition: transform 0.4s ease, opacity 0.4s ease;
+	/* Refined page transitions */
+	.page-transition-enter-active,
+	.page-transition-leave-active {
+		transition: opacity 0.3s ease,
+			transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 	}
 
-	.scale-enter-from,
-	.scale-leave-to {
-		transform: scale(1.1);
+	.page-transition-enter-from {
 		opacity: 0;
+		transform: translateY(10px);
+	}
+
+	.page-transition-leave-to {
+		opacity: 0;
+		transform: translateY(-10px);
 	}
 </style>

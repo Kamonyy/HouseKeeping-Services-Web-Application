@@ -1,71 +1,214 @@
 <template>
-	<nav
-		class="flex justify-between items-center px-6 py-4 rtl bg-gradient-to-r from-gray-900/90 to-gray-800/95 backdrop-blur-md sticky top-0 z-10 border-b border-blue-900/30 shadow-lg animate-fadeIn"
-	>
-		<div class="flex items-center gap-6">
-			<RouterLink to="/" class="group">
-				<img
-					src="@/img/logo.png"
-					alt="Logo"
-					class="h-14 w-auto transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 drop-shadow-lg group-hover:drop-shadow-glow"
-				/>
-			</RouterLink>
-			<div class="link-container">
-				<RouterLink :class="linkStyle('/services')" to="/services"
-					>خدماتنا</RouterLink
-				>
+	<div class="sticky top-0 z-50 bg-white border-b border-gray-100 font-cairo">
+		<nav
+			class="flex justify-between items-center py-4 px-6 rtl container mx-auto"
+		>
+			<div class="flex items-center gap-8">
+				<RouterLink to="/" class="group">
+					<img
+						src="@/img/logo.png"
+						alt="Logo"
+						class="h-12 w-auto transition-all duration-300 group-hover:scale-105 drop-shadow-sm"
+					/>
+				</RouterLink>
+				<div class="hidden md:flex gap-6">
+					<div class="nav-link">
+						<RouterLink to="/services" class="nav-item">خدماتنا</RouterLink>
+					</div>
+
+					<!-- Provider Management Link (visible only to providers) -->
+					<div class="nav-link" v-if="userStore.isProvider">
+						<RouterLink to="/provider-management" class="nav-item"
+							>إدارة الخدمات</RouterLink
+						>
+					</div>
+
+					<!-- Admin Approval Link (visible only to admins) -->
+					<div class="nav-link" v-if="userStore.isAdmin">
+						<RouterLink to="/admin/dashboard" class="nav-item"
+							>لوحة التحكم</RouterLink
+						>
+					</div>
+
+					<div class="nav-link">
+						<RouterLink to="/help" class="nav-item">مساعدة</RouterLink>
+					</div>
+				</div>
 			</div>
 
-			<!-- Provider Management Link (visible only to providers) -->
-			<div class="link-container" v-if="userStore.isProvider">
-				<RouterLink
-					:class="linkStyle('/provider-management')"
-					to="/provider-management"
-					>إدارة الخدمات</RouterLink
-				>
-			</div>
+			<div class="flex items-center gap-4">
+				<!-- Mobile menu button -->
+				<button @click="toggleMobileMenu" class="md:hidden flex items-center">
+					<i class="fas fa-bars text-gray-700 text-xl"></i>
+				</button>
 
-			<!-- Admin Approval Link (visible only to admins) -->
-			<div class="link-container" v-if="userStore.isAdmin">
-				<RouterLink :class="linkStyle('/admin/dashboard')" to="/admin/dashboard"
-					>لوحة التحكم</RouterLink
-				>
+				<div class="hidden md:flex items-center gap-4">
+					<div class="nav-link" v-if="userStore.isLoggedIn">
+						<button @click="handleLogout" class="nav-item">تسجيل خروج</button>
+					</div>
+					<div v-if="userStore.isLoggedIn" class="relative">
+						<span
+							id="username-badge"
+							class="font-medium text-black bg-gradient-to-r from-primary to-primary-light rounded-full px-4 py-1.5 shadow-md transition-all duration-300 hover:shadow-lg flex items-center gap-2"
+						>
+							<i class="fas fa-user-circle"></i>
+							{{ userStore.displayName }}
+						</span>
+						<div v-if="showSessionInfo" class="session-info">
+							<div class="p-4 border-b border-gray-100">
+								<div class="flex items-center gap-3">
+									<div
+										class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center"
+									>
+										<i class="fas fa-user text-primary"></i>
+									</div>
+									<div>
+										<div class="font-medium text-gray-900">
+											{{ userStore.firstName || userStore.username }}
+											{{ userStore.lastName }}
+										</div>
+										<div class="text-sm text-gray-500">
+											@{{ userStore.username }}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="p-3">
+								<div class="text-sm font-medium text-gray-600">
+									الجلسة تنتهي في:
+								</div>
+								<div class="text-primary font-medium mt-1">
+									{{ formattedSessionTime }}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="nav-link" v-else>
+						<div class="flex items-center gap-3">
+							<RouterLink
+								to="/login"
+								class="auth-btn login-btn flex items-center gap-2"
+							>
+								<i class="fas fa-sign-in-alt"></i>
+								تسجيل دخول
+							</RouterLink>
+							<RouterLink
+								to="/register"
+								class="auth-btn signup-btn flex items-center gap-2"
+							>
+								<i class="fas fa-user-plus"></i>
+								إنشاء حساب
+							</RouterLink>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Mobile menu -->
+		<div
+			v-if="mobileMenuOpen"
+			class="md:hidden bg-white border-t border-gray-100 shadow-lg animate-slideDown"
+		>
+			<div class="container mx-auto px-6 py-4">
+				<div class="flex flex-col gap-4 rtl">
+					<!-- User info (if logged in) -->
+					<div
+						v-if="userStore.isLoggedIn"
+						class="flex items-center gap-3 p-3 bg-blue-50 rounded-lg mb-2"
+					>
+						<div
+							class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center"
+						>
+							<i class="fas fa-user text-primary"></i>
+						</div>
+						<div>
+							<div class="font-medium text-gray-900">
+								{{ userStore.firstName || userStore.username }}
+								{{ userStore.lastName }}
+							</div>
+							<div class="text-xs text-gray-500">@{{ userStore.username }}</div>
+						</div>
+					</div>
+
+					<RouterLink
+						@click="closeMobileMenu"
+						to="/services"
+						class="mobile-nav-item"
+					>
+						<i class="fas fa-list-ul w-6"></i>
+						خدماتنا
+					</RouterLink>
+
+					<RouterLink
+						v-if="userStore.isProvider"
+						@click="closeMobileMenu"
+						to="/provider-management"
+						class="mobile-nav-item"
+					>
+						<i class="fas fa-cog w-6"></i>
+						إدارة الخدمات
+					</RouterLink>
+
+					<RouterLink
+						v-if="userStore.isAdmin"
+						@click="closeMobileMenu"
+						to="/admin/dashboard"
+						class="mobile-nav-item"
+					>
+						<i class="fas fa-tachometer-alt w-6"></i>
+						لوحة التحكم
+					</RouterLink>
+
+					<RouterLink
+						@click="closeMobileMenu"
+						to="/help"
+						class="mobile-nav-item"
+					>
+						<i class="fas fa-question-circle w-6"></i>
+						مساعدة
+					</RouterLink>
+
+					<div class="border-t border-gray-100 my-2"></div>
+
+					<RouterLink
+						v-if="!userStore.isLoggedIn"
+						@click="closeMobileMenu"
+						to="/login"
+						class="mobile-nav-item text-primary"
+					>
+						<i class="fas fa-sign-in-alt w-6"></i>
+						تسجيل دخول
+					</RouterLink>
+
+					<RouterLink
+						v-if="!userStore.isLoggedIn"
+						@click="closeMobileMenu"
+						to="/register"
+						class="mobile-nav-item text-secondary"
+					>
+						<i class="fas fa-user-plus w-6"></i>
+						إنشاء حساب
+					</RouterLink>
+
+					<button
+						v-else
+						@click="handleLogoutMobile"
+						class="mobile-nav-item text-red-600"
+					>
+						<i class="fas fa-sign-out-alt w-6"></i>
+						تسجيل خروج
+					</button>
+				</div>
 			</div>
 		</div>
-
-		<div class="flex items-center gap-5 rtl:space-x-reverse">
-			<div class="link-container">
-				<RouterLink :class="linkStyle('/help')" to="/help"> مساعدة </RouterLink>
-			</div>
-			<div class="link-container" v-if="userStore.isLoggedIn">
-				<RouterLink
-					@click="handleLogout"
-					to="/login"
-					:class="linkStyle('/login')"
-				>
-					تسجيل خروج
-				</RouterLink>
-			</div>
-			<span
-				v-if="userStore.isLoggedIn"
-				id="un"
-				class="font-semibold text-white bg-gradient-to-r from-blue-600/90 to-blue-500/90 border border-blue-700/50 rounded-full px-5 py-2 shadow-glow transition-all duration-300 hover:scale-105 hover:from-blue-500/90 hover:to-blue-400/90 backdrop-blur-md animate-pulse-subtle"
-			>
-				{{ userStore.username }}
-			</span>
-			<div class="link-container" v-else>
-				<RouterLink to="/login" :class="linkStyle('/login')">
-					تسجيل دخول
-				</RouterLink>
-			</div>
-		</div>
-	</nav>
+	</div>
 </template>
 
 <script>
 	import { RouterLink, useRoute, useRouter } from "vue-router";
 	import { useUserStore } from "@/store/userStore";
-	import { ref, computed } from "vue";
+	import { ref, computed, onMounted, onUnmounted } from "vue";
 	import { defineComponent } from "vue";
 
 	export default defineComponent({
@@ -76,169 +219,234 @@
 			const route = useRoute();
 			const router = useRouter();
 			const userStore = useUserStore();
+			const showSessionInfo = ref(false);
+			const sessionTimer = ref(null);
+			const formattedSessionTime = ref("");
+			const mobileMenuOpen = ref(false);
+
+			// Format remaining session time
+			const updateSessionTime = () => {
+				if (userStore.isLoggedIn) {
+					const timeLeft = userStore.tokenExpiresIn;
+					const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+					const minutes = Math.floor(
+						(timeLeft % (1000 * 60 * 60)) / (1000 * 60)
+					);
+
+					formattedSessionTime.value = `${hours} ساعة ${minutes} دقيقة`;
+					showSessionInfo.value = true;
+				} else {
+					showSessionInfo.value = false;
+				}
+			};
+
+			// Update session time every minute
+			onMounted(() => {
+				updateSessionTime();
+				sessionTimer.value = setInterval(updateSessionTime, 60000);
+			});
+
+			onUnmounted(() => {
+				if (sessionTimer.value) {
+					clearInterval(sessionTimer.value);
+				}
+			});
 
 			const handleLogout = () => {
 				userStore.logout();
 				router.push("/");
 			};
 
-			// Computed property for dynamic link styles
-			const linkStyle = computed(() => {
-				return (path) => {
-					return [
-						"px-4", // Reduced padding
-						"py-2", // Reduced padding
-						"rounded-full", // Fully rounded corners
-						"transition-all",
-						"duration-300",
-						"font-semibold", // Use a semi-bold font weight
-						"text-white", // Default text color
-						"focus:outline-none",
-						"focus:ring-2",
-						"focus:ring-blue-500/50",
-						"focus:ring-offset-2",
-						"bg-transparent", // Make the background transparent
-						"shadow-none",
-						"hover:bg-white/10", // Add a light background on hover
-						"hover:text-blue-300",
-						"block", // Ensure block display for proper hover area
-						userStore.isLoggedIn && route.path === path
-							? "bg-gradient-to-r from-blue-600/90 to-blue-500/80 text-white shadow-glow"
-							: "", // Active state
-						!userStore.isLoggedIn && route.path === path
-							? "bg-gradient-to-r from-blue-600/90 to-blue-500/80 text-white shadow-glow"
-							: "",
-					];
-				};
-			});
+			const handleLogoutMobile = () => {
+				closeMobileMenu();
+				userStore.logout();
+				router.push("/");
+			};
 
-			return { route, router, userStore, handleLogout, linkStyle };
+			const toggleMobileMenu = () => {
+				mobileMenuOpen.value = !mobileMenuOpen.value;
+			};
+
+			const closeMobileMenu = () => {
+				mobileMenuOpen.value = false;
+			};
+
+			return {
+				route,
+				router,
+				userStore,
+				handleLogout,
+				handleLogoutMobile,
+				showSessionInfo,
+				formattedSessionTime,
+				mobileMenuOpen,
+				toggleMobileMenu,
+				closeMobileMenu,
+			};
 		},
 	});
 </script>
 
 <style scoped>
-	nav {
-		max-width: 1280px;
-		margin: 0 auto;
+	/* Import Cairo font - perfect for Arabic */
+	@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap");
+
+	.rtl {
+		direction: rtl;
+		text-align: right;
+	}
+
+	.font-cairo {
+		font-family: "Cairo", sans-serif;
+	}
+
+	/* Add nav bar gradient and shadow */
+	.sticky {
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+		background: linear-gradient(to bottom, #ffffff, #f8fafc);
+		animation: navReveal 0.5s ease-out forwards;
+	}
+
+	@keyframes navReveal {
+		from {
+			transform: translateY(-100%);
+			opacity: 0;
+		}
+		to {
+			transform: translateY(0);
+			opacity: 1;
+		}
+	}
+
+	.nav-link {
 		position: relative;
-		overflow: hidden;
 	}
 
-	nav::before {
-		content: "";
-		position: absolute;
-		top: -50%;
-		left: -50%;
-		width: 200%;
-		height: 200%;
-		background: radial-gradient(
-			circle,
-			rgba(59, 130, 246, 0.1) 0%,
-			transparent 70%
-		);
-		opacity: 0.5;
-		transform: rotate(0deg);
-		animation: navGlow 15s linear infinite;
-		pointer-events: none;
-	}
-
-	#un {
-		box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+	.nav-item {
+		font-weight: 600;
+		color: var(--text-dark, #1e293b);
 		position: relative;
-		overflow: hidden;
-	}
-
-	#un::after {
-		content: "";
-		position: absolute;
-		top: -50%;
-		left: -50%;
-		width: 200%;
-		height: 200%;
-		background: linear-gradient(
-			90deg,
-			transparent,
-			rgba(255, 255, 255, 0.2),
-			transparent
-		);
-		transform: rotate(25deg);
-		animation: shimmer 3s infinite;
-	}
-
-	.shadow-glow {
-		box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-	}
-
-	.drop-shadow-glow {
-		filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
-	}
-
-	/* Link container with hover effect */
-	.link-container {
-		position: relative;
-		display: inline-block;
-	}
-
-	.link-container a {
-		position: relative;
-		z-index: 1;
-	}
-
-	.link-container::after {
-		content: "";
-		position: absolute;
-		bottom: -2px;
-		left: 50%;
-		width: 0;
-		height: 2px;
-		background-color: #3b82f6;
+		padding: 0.5rem 0;
 		transition: all 0.3s ease;
-		transform: translateX(-50%);
-		border-radius: 4px;
+		text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+		letter-spacing: 0.01em;
 	}
 
-	.link-container:hover::after {
-		width: 80%;
+	.nav-item:hover {
+		color: var(--primary-color, #3b82f6);
 	}
 
-	@keyframes navGlow {
-		0% {
-			transform: rotate(0deg);
-		}
-		100% {
-			transform: rotate(360deg);
-		}
+	.nav-item::after {
+		content: "";
+		position: absolute;
+		width: 0;
+		height: 2.5px;
+		bottom: 0;
+		left: 0;
+		background-color: var(--primary-color, #3b82f6);
+		transition: width 0.3s ease;
 	}
 
-	@keyframes shimmer {
-		0% {
-			transform: translateX(-150%) rotate(25deg);
-		}
-		100% {
-			transform: translateX(150%) rotate(25deg);
-		}
+	.nav-item:hover::after {
+		width: 100%;
 	}
 
-	@keyframes pulse-subtle {
-		0%,
-		100% {
-			box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
-		}
-		50% {
-			box-shadow: 0 0 25px rgba(59, 130, 246, 0.6);
-		}
+	.router-link-active.nav-item {
+		color: var(--primary-color, #3b82f6);
+		font-weight: 700;
 	}
 
-	.animate-pulse-subtle {
-		animation: pulse-subtle 3s infinite ease-in-out;
+	.router-link-active.nav-item::after {
+		width: 100%;
+		background-color: var(--primary-color, #3b82f6);
 	}
 
-	.animate-fadeIn {
-		animation: fadeIn 0.8s ease-out;
+	/* Auth buttons styling */
+	.auth-btn {
+		padding: 0.5rem 1.25rem;
+		border-radius: 9999px;
+		font-weight: 700;
+		transition: all 0.3s ease;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		letter-spacing: 0.02em;
 	}
 
-	@keyframes fadeIn {
+	.login-btn {
+		background: var(--primary-color, #3b82f6);
+		color: white;
+		border: 2px solid var(--primary-color, #3b82f6);
+	}
+
+	.login-btn:hover {
+		background: var(--primary-dark, #2563eb);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+	}
+
+	.signup-btn {
+		background: white;
+		color: var(--secondary-color, #f59e0b);
+		border: 2px solid var(--secondary-color, #f59e0b);
+	}
+
+	.signup-btn:hover {
+		background: var(--secondary-light, #fef3c7);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 8px rgba(245, 158, 11, 0.2);
+	}
+
+	.session-info {
+		position: absolute;
+		top: 120%;
+		right: 0;
+		min-width: 240px;
+		background-color: white;
+		border-radius: 12px;
+		box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+			0 10px 10px -5px rgba(0, 0, 0, 0.04);
+		border: 1px solid #e5e7eb;
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(10px);
+		transition: all 0.3s ease;
+		z-index: 100;
+	}
+
+	#username-badge:hover + .session-info,
+	.session-info:hover {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
+	}
+
+	.mobile-nav-item {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.75rem;
+		border-radius: 0.5rem;
+		font-weight: 600;
+		color: var(--text-dark, #1e293b);
+		transition: all 0.2s ease;
+		letter-spacing: 0.01em;
+	}
+
+	.mobile-nav-item:hover {
+		background-color: #f1f5f9;
+		color: var(--primary-color, #3b82f6);
+	}
+
+	.mobile-nav-item.router-link-active {
+		background-color: #ebf5ff;
+		color: var(--primary-color, #3b82f6);
+		font-weight: 700;
+	}
+
+	.drop-shadow-sm {
+		filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+	}
+
+	@keyframes slideDown {
 		from {
 			opacity: 0;
 			transform: translateY(-10px);
@@ -247,5 +455,30 @@
 			opacity: 1;
 			transform: translateY(0);
 		}
+	}
+
+	.animate-slideDown {
+		animation: slideDown 0.3s ease forwards;
+	}
+
+	/* Arabic font optimization */
+	.nav-item,
+	.mobile-nav-item,
+	button,
+	a {
+		letter-spacing: -0.01em;
+		line-height: 1.6;
+	}
+
+	/* CSS Variables for consistent colors */
+	:root {
+		--primary-color: #2563eb;
+		--primary-light: #3b82f6;
+		--primary-dark: #1d4ed8;
+		--secondary-color: #f59e0b;
+		--secondary-light: #fef3c7;
+		--text-dark: #1e293b;
+		--text-medium: #475569;
+		--text-light: #64748b;
 	}
 </style>
