@@ -2,18 +2,16 @@
 	import { RouterView } from "vue-router";
 	import Nav from "@/components/Nav.vue";
 	import Footer from "@/components/Footer.vue";
-	import ToastContainer from "./components/ToastContainer.vue";
-	import ScrollProgressBar from "./components/ScrollProgressBar.vue";
-	import GlobalStyles from "./components/GlobalStyles.vue";
+	import ToastContainer from "@/components/ToastContainer.vue";
+	import ScrollProgressBar from "@/components/ScrollProgressBar.vue";
+	import GlobalStyles from "@/components/GlobalStyles.vue";
 </script>
 
 <template>
 	<div class="app-layout">
 		<GlobalStyles />
 		<ScrollProgressBar />
-		<header class="app-header">
-			<Nav />
-		</header>
+		<Nav class="app-header" />
 		<ToastContainer />
 		<main class="app-main">
 			<RouterView v-slot="{ Component }">
@@ -54,7 +52,7 @@
 		margin-top: auto;
 	}
 
-	/* Refined page transitions */
+	/* Page transitions */
 	.page-transition-enter-active,
 	.page-transition-leave-active {
 		transition: opacity 0.3s ease,

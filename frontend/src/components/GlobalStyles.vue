@@ -3,12 +3,11 @@
 </script>
 
 <template>
-	<!-- This is an invisible component that applies global styles -->
-	<div class="hidden"></div>
+	<!-- Empty template - this component only provides global styles -->
 </template>
 
 <style>
-	/* Global Typography Enhancements */
+	/* Design tokens */
 	:root {
 		--color-primary: #0066ff;
 		--color-primary-light: #4d94ff;
@@ -27,17 +26,18 @@
 		--color-gray-900: #0f172a;
 	}
 
+	/* Base typography */
 	body {
 		font-family: "Cairo", sans-serif;
 		font-size: 16px;
 		line-height: 1.6;
 		color: var(--color-gray-800);
-		text-shadow: 0 0 1px rgba(0, 0, 0, 0.01);
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		background-color: var(--color-gray-50);
 	}
 
+	/* Headings */
 	h1,
 	h2,
 	h3,
@@ -71,34 +71,14 @@
 		font-weight: 600;
 	}
 
+	/* Paragraph */
 	p {
 		margin-bottom: 1rem;
-		font-size: 1rem;
 		line-height: 1.7;
 		color: var(--color-gray-700);
 	}
 
-	/* Fancy Text Effects */
-	.text-gradient {
-		background-clip: text;
-		-webkit-background-clip: text;
-		color: transparent;
-		background-image: linear-gradient(
-			to right,
-			var(--color-primary),
-			var(--color-primary-light)
-		);
-	}
-
-	.text-shadow-sm {
-		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-	}
-
-	.drop-shadow-text {
-		filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
-	}
-
-	/* Enhanced Links */
+	/* Links */
 	a {
 		color: var(--color-primary);
 		text-decoration: none;
@@ -111,73 +91,32 @@
 		color: var(--color-primary-dark);
 	}
 
-	/* RTL-specific typography */
-	.rtl h1,
-	.rtl h2,
-	.rtl h3,
-	.rtl h4,
-	.rtl h5,
-	.rtl h6,
-	.rtl p,
-	.rtl span,
-	.rtl a,
-	.rtl div {
-		font-family: "Cairo", sans-serif;
-		letter-spacing: -0.01em;
-	}
-
-	/* Enhance readability for Arabic text */
+	/* RTL support */
 	.rtl {
 		line-height: 1.8;
 		font-feature-settings: "kern", "liga", "calt";
 	}
 
-	/* Enhance button text */
+	/* Form elements */
 	button,
 	.btn {
 		font-family: "Cairo", sans-serif;
 		font-weight: 600;
-		letter-spacing: 0.01em;
 	}
 
-	/* Improved form text */
 	input,
 	textarea,
 	select {
 		font-family: "Cairo", sans-serif;
 		color: var(--color-gray-800);
-		font-weight: 500;
 	}
 
-	/* Reduce opacity of placeholder text */
 	::placeholder {
 		opacity: 0.7;
 		color: var(--color-gray-500);
 	}
 
-	/* Improved text contrast classes */
-	.text-primary {
-		color: var(--color-primary);
-	}
-
-	.text-secondary {
-		color: var(--color-secondary);
-	}
-
-	.text-dark {
-		color: var(--color-gray-900);
-		font-weight: 600;
-	}
-
-	.text-medium {
-		color: var(--color-gray-700);
-	}
-
-	.text-light {
-		color: var(--color-gray-600);
-	}
-
-	/* Enhanced focus styles for accessibility */
+	/* Focus states for accessibility */
 	button:focus,
 	a:focus,
 	input:focus,
@@ -187,7 +126,7 @@
 		outline-offset: 2px;
 	}
 
-	/* Improved visibility for labels */
+	/* Labels */
 	label {
 		color: var(--color-gray-800);
 		font-weight: 600;
@@ -195,37 +134,28 @@
 		display: inline-block;
 	}
 
-	/* Global utility classes for text colors */
+	/* Utility classes */
 	.text-primary {
 		color: var(--color-primary) !important;
-		font-weight: 600 !important;
-	}
-
-	.text-primary-dark {
-		color: var(--color-primary-dark) !important;
-		font-weight: 600 !important;
 	}
 
 	.text-secondary {
 		color: var(--color-secondary) !important;
-		font-weight: 600 !important;
 	}
 
-	.text-color-dark {
-		color: var(--color-gray-800) !important;
-		font-weight: 500 !important;
+	.text-dark {
+		color: var(--color-gray-900) !important;
 	}
 
-	.text-color-medium {
+	.text-medium {
 		color: var(--color-gray-700) !important;
-		font-weight: 500 !important;
 	}
 
-	.text-color-light {
+	.text-light {
 		color: var(--color-gray-600) !important;
 	}
 
-	/* Card title styles for better visibility */
+	/* Card and overlay styles */
 	.card-title,
 	.category-name,
 	.service-title {
@@ -234,13 +164,24 @@
 		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7) !important;
 	}
 
-	/* Ensure gradient overlays provide good contrast */
 	.gradient-overlay {
 		background: linear-gradient(
 			to top,
 			rgba(0, 0, 0, 0.9) 0%,
 			rgba(0, 0, 0, 0.7) 40%,
 			rgba(0, 0, 0, 0.2) 100%
+		);
+	}
+
+	/* Special text effects */
+	.text-gradient {
+		background-clip: text;
+		-webkit-background-clip: text;
+		color: transparent;
+		background-image: linear-gradient(
+			to right,
+			var(--color-primary),
+			var(--color-primary-light)
 		);
 	}
 </style>

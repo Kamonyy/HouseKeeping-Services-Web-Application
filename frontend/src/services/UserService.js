@@ -1,249 +1,234 @@
 /**
- * User Service for handling user-related API operations
+ * User service for managing user-related API operations
  */
-export default {
+class UserService {
 	/**
-	 * Get all users
+	 * Fetches all users from the API
 	 * @param {string} token - Authentication token
-	 * @returns {Promise<Array>} - Array of users
+	 * @returns {Array} List of users
 	 */
 	async getUsers(token) {
 		try {
 			const response = await fetch("/api/user", {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
+				headers: { Authorization: `Bearer ${token}` },
 			});
 
 			if (!response.ok) {
 				const errorText = await response.text();
 				throw new Error(
-					`فشل تحميل المستخدمين: ${response.status} - ${errorText}`
+					`Failed to load users: ${response.status} - ${errorText}`
 				);
 			}
 
-			// Parse the response
+			// Parse response text to handle empty responses
 			const rawResponse = await response.text();
-			console.log("Raw API response text:", rawResponse);
-			const data = rawResponse ? JSON.parse(rawResponse) : [];
+			if (!rawResponse) return [];
 
+			const data = JSON.parse(rawResponse);
+
+			// Handle different response formats
 			if (Array.isArray(data)) {
 				return data;
 			} else if (typeof data === "object") {
-				// Try to extract array from response
-				const arrayProps = Object.entries(data).find(([_, val]) =>
+				// Look for arrays in the response
+				const arrayProp = Object.entries(data).find(([_, val]) =>
 					Array.isArray(val)
 				);
-				if (arrayProps) {
-					return arrayProps[1];
-				} else {
-					// Single user case
-					return [data];
+				if (arrayProp) {
+					return arrayProp[1];
 				}
+				// Single user case - wrap in array
+				return [data];
 			}
 
 			return [];
 		} catch (error) {
-			console.error("Error fetching users:", error);
+			console.warn(`Error fetching users: ${error.message}`);
 			throw error;
 		}
-	},
+	}
 
 	/**
-	 * Create a new user
+	 * Creates a new user
 	 * @param {Object} userData - User data
 	 * @param {string} token - Authentication token
-	 * @returns {Promise<Object>} - Created user
+	 * @returns {Object} Created user
 	 */
 	async createUser(userData, token) {
-		try {
-			const response = await fetch("/api/user", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
-				body: JSON.stringify(userData),
-			});
-
-			if (!response.ok) {
-				const errorText = await response.text();
-				throw new Error(`Failed to create user: ${errorText}`);
-			}
-
-			return await response.text();
-		} catch (error) {
-			console.error("Error creating user:", error);
-			throw error;
-		}
-	},
+		return this.sendRequest("/api/user", "POST", userData, token);
+	}
 
 	/**
-	 * Update an existing user
+	 * Updates an existing user
 	 * @param {string} userId - User ID
 	 * @param {Object} userData - User data to update
 	 * @param {string} token - Authentication token
-	 * @returns {Promise<Object>} - Updated user
+	 * @returns {Object} Updated user
 	 */
 	async updateUser(userId, userData, token) {
-		try {
-			const response = await fetch(`/api/user/${userId}`, {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
-				body: JSON.stringify(userData),
-			});
-
-			if (!response.ok) {
-				const errorText = await response.text();
-				throw new Error(`Failed to update user: ${errorText}`);
-			}
-
-			return await response.text();
-		} catch (error) {
-			console.error("Error updating user:", error);
-			throw error;
-		}
-	},
+		return this.sendRequest(`/api/user/${userId}`, "PUT", userData, token);
+	}
 
 	/**
-	 * Delete a user
+	 * Deletes a user
 	 * @param {string} userId - User ID
 	 * @param {string} token - Authentication token
-	 * @returns {Promise<void>}
+	 * @returns {boolean} Success status
 	 */
 	async deleteUser(userId, token) {
 		try {
 			const response = await fetch(`/api/user/${userId}`, {
 				method: "DELETE",
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
+				headers: { Authorization: `Bearer ${token}` },
 			});
 
 			if (!response.ok) {
 				const errorText = await response.text();
 				throw new Error(`Failed to delete user: ${errorText}`);
 			}
+
+			return true;
 		} catch (error) {
-			console.error("Error deleting user:", error);
+			console.warn(`Error deleting user: ${error.message}`);
 			throw error;
 		}
-	},
+	}
 
 	/**
-	 * Normalize user data for consistent properties
+	 * Normalizes user data for consistent property access
 	 * @param {Object} user - User data
-	 * @returns {Object} - Normalized user data
+	 * @returns {Object} Normalized user object
 	 */
 	normalizeUserData(user) {
-		console.log("Processing user:", user.username);
-		console.log(
-			"Original UserType:",
-			user.UserType,
-			"- type:",
-			typeof user.UserType
-		);
+		// Get user type from available properties
+		const userType = this.determineUserType(user);
 
-		// Determine UserType value (enum: 0 = Customer/User, 1 = Provider, 2 = Admin)
-		let userType = null;
+		// Create a normalized user object with consistent properties
+		return {
+			id: user.id || user.Id || user.userId || user.UserId || "",
+			username:
+				user.username || user.Username || user.userName || user.UserName || "",
+			email: user.email || user.Email || "",
+			firstName: user.firstName || user.FirstName || "",
+			lastName: user.lastName || user.LastName || "",
+			fullName: this.getFullName(user),
+			userType: userType,
+			userTypeName: this.getUserTypeName(userType),
+			isActive: user.isActive ?? user.IsActive ?? true,
+			createdAt: user.createdAt || user.CreatedAt || new Date().toISOString(),
+			role: user.role || user.Role || this.getUserTypeName(userType),
+		};
+	}
 
-		// 1. Try to extract UserType from available properties
+	// Helper methods
+
+	/**
+	 * Determines the user type from available properties
+	 */
+	determineUserType(user) {
+		// Check UserType property (case-sensitive)
 		if (user.UserType !== undefined) {
-			// UserType could be a number, string or enum name from backend
 			if (typeof user.UserType === "number") {
-				userType = user.UserType; // Already a number (0, 1, 2)
+				return user.UserType;
 			} else if (typeof user.UserType === "string") {
-				// Check if it's a numeric string
-				if (!isNaN(parseInt(user.UserType))) {
-					userType = parseInt(user.UserType);
-				}
-				// Check if it's a string enum name (backend returns UserType.ToString())
-				else if (user.UserType === "Admin") {
-					userType = 2;
-				} else if (user.UserType === "Provider") {
-					userType = 1;
-				} else if (user.UserType === "Customer") {
-					userType = 0;
-				}
+				return !isNaN(parseInt(user.UserType))
+					? parseInt(user.UserType)
+					: this.getUserTypeFromString(user.UserType);
 			}
 		}
-		// 2. Try lowercase property as fallback with the same logic
+
+		// Check userType property (lowercase)
 		else if (user.userType !== undefined) {
 			if (typeof user.userType === "number") {
-				userType = user.userType;
+				return user.userType;
 			} else if (typeof user.userType === "string") {
-				if (!isNaN(parseInt(user.userType))) {
-					userType = parseInt(user.userType);
-				} else if (user.userType === "Admin") {
-					userType = 2;
-				} else if (user.userType === "Provider") {
-					userType = 1;
-				} else if (user.userType === "Customer") {
-					userType = 0;
-				}
+				return !isNaN(parseInt(user.userType))
+					? parseInt(user.userType)
+					: this.getUserTypeFromString(user.userType);
 			}
 		}
-		// 3. Try to derive from role property if no UserType found
-		else if (user.role !== undefined) {
-			if (user.role === "Admin") userType = 2;
-			else if (user.role === "Provider") userType = 1;
-			else if (user.role === "User" || user.role === "Customer") userType = 0;
-		}
-		// 4. Fallback to default
-		else {
-			userType = 0; // Default to regular user (Customer)
+
+		// Check role property
+		else if (user.role) {
+			return this.getUserTypeFromString(user.role);
 		}
 
-		// Validate that userType is a number 0, 1, or 2
-		if (userType !== 0 && userType !== 1 && userType !== 2) {
-			console.warn(
-				`Invalid UserType value for ${user.username}: ${userType}, defaulting to 0`
-			);
-			userType = 0;
+		// Default to regular customer (0)
+		return 0;
+	}
+
+	/**
+	 * Converts a string user type to numeric enum
+	 */
+	getUserTypeFromString(typeString) {
+		const normalized = String(typeString).toLowerCase();
+
+		if (normalized === "admin") return 2;
+		if (normalized === "provider") return 1;
+
+		// Customer, User, or unknown types
+		return 0;
+	}
+
+	/**
+	 * Gets the user type name based on numeric value
+	 */
+	getUserTypeName(typeValue) {
+		const type = parseInt(typeValue);
+
+		switch (type) {
+			case 2:
+				return "Admin";
+			case 1:
+				return "Provider";
+			case 0:
+			default:
+				return "Customer";
+		}
+	}
+
+	/**
+	 * Gets the user's full name from available properties
+	 */
+	getFullName(user) {
+		const firstName = user.firstName || user.FirstName || "";
+		const lastName = user.lastName || user.LastName || "";
+
+		if (firstName || lastName) {
+			return `${firstName} ${lastName}`.trim();
 		}
 
-		// Determine role string based on UserType
-		let primaryRole = "User";
-		if (userType === 2) primaryRole = "Admin";
-		else if (userType === 1) primaryRole = "Provider";
+		return user.fullName || user.FullName || user.username || "";
+	}
 
-		// Extract name information
-		const firstName =
-			user.FirstName ||
-			user.firstName ||
-			user.first_name ||
-			user.firstname ||
-			user.givenName ||
-			"";
+	/**
+	 * Sends an API request with proper JSON formatting
+	 */
+	async sendRequest(url, method, data, token) {
+		try {
+			const response = await fetch(url, {
+				method,
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify(data),
+			});
 
-		const lastName =
-			user.LastName ||
-			user.lastName ||
-			user.last_name ||
-			user.lastname ||
-			user.surname ||
-			user.familyName ||
-			"";
+			if (!response.ok) {
+				const errorText = await response.text();
+				throw new Error(`Request failed: ${errorText}`);
+			}
 
-		// Create normalized user object
-		const normalizedUser = {
-			id: user.id,
-			username: user.username || user.userName,
-			email: user.email,
-			role: primaryRole,
-			UserType: userType, // Store the numeric enum value
-			isActive: typeof user.isActive === "boolean" ? user.isActive : true,
-			createdDate: user.createdDate || user.dateRegistered,
-			firstName: firstName,
-			lastName: lastName,
-			FirstName: firstName,
-			LastName: lastName,
-		};
+			// Handle empty responses (like 204 No Content)
+			const responseText = await response.text();
+			return responseText ? JSON.parse(responseText) : { success: true };
+		} catch (error) {
+			console.warn(`API error (${method} ${url}): ${error.message}`);
+			throw error;
+		}
+	}
+}
 
-		console.log("Normalized user:", normalizedUser);
-		return normalizedUser;
-	},
-};
+// Create and export a singleton instance
+export default new UserService();

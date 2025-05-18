@@ -205,85 +205,85 @@
 	</div>
 </template>
 
-<script>
-	import { RouterLink, useRoute, useRouter } from "vue-router";
-	import { useUserStore } from "@/store/userStore";
+<script setup>
 	import { ref, computed, onMounted, onUnmounted } from "vue";
-	import { defineComponent } from "vue";
+	import { RouterLink, useRouter } from "vue-router";
+	import { useUserStore } from "../store/userStore";
+	import { useToastStore } from "../store/toastStore";
 
-	export default defineComponent({
-		components: {
-			RouterLink,
-		},
-		setup() {
-			const route = useRoute();
-			const router = useRouter();
-			const userStore = useUserStore();
-			const showSessionInfo = ref(false);
-			const sessionTimer = ref(null);
-			const formattedSessionTime = ref("");
-			const mobileMenuOpen = ref(false);
+	const router = useRouter();
+	const userStore = useUserStore();
+	const toastStore = useToastStore();
 
-			// Format remaining session time
-			const updateSessionTime = () => {
-				if (userStore.isLoggedIn) {
-					const timeLeft = userStore.tokenExpiresIn;
-					const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-					const minutes = Math.floor(
-						(timeLeft % (1000 * 60 * 60)) / (1000 * 60)
-					);
+	// Mobile menu state
+	const mobileMenuOpen = ref(false);
 
-					formattedSessionTime.value = `${hours} ساعة ${minutes} دقيقة`;
-					showSessionInfo.value = true;
-				} else {
-					showSessionInfo.value = false;
-				}
-			};
+	// Session info dropdown state
+	const showSessionInfo = ref(false);
 
-			// Update session time every minute
-			onMounted(() => {
-				updateSessionTime();
-				sessionTimer.value = setInterval(updateSessionTime, 60000);
-			});
+	// Format the remaining session time
+	const formattedSessionTime = computed(() => {
+		const expiresIn = userStore.tokenExpiresIn;
+		if (!expiresIn) return "غير معروف";
 
-			onUnmounted(() => {
-				if (sessionTimer.value) {
-					clearInterval(sessionTimer.value);
-				}
-			});
+		const hours = Math.floor(expiresIn / (1000 * 60 * 60));
+		const minutes = Math.floor((expiresIn % (1000 * 60 * 60)) / (1000 * 60));
 
-			const handleLogout = () => {
-				userStore.logout();
-				router.push("/");
-			};
+		if (hours > 0) {
+			return `${hours} ساعة و ${minutes} دقيقة`;
+		} else {
+			return `${minutes} دقيقة`;
+		}
+	});
 
-			const handleLogoutMobile = () => {
-				closeMobileMenu();
-				userStore.logout();
-				router.push("/");
-			};
+	// Mobile menu handlers
+	const toggleMobileMenu = () => {
+		mobileMenuOpen.value = !mobileMenuOpen.value;
+	};
 
-			const toggleMobileMenu = () => {
-				mobileMenuOpen.value = !mobileMenuOpen.value;
-			};
+	const closeMobileMenu = () => {
+		mobileMenuOpen.value = false;
+	};
 
-			const closeMobileMenu = () => {
-				mobileMenuOpen.value = false;
-			};
+	// Logout handlers
+	const handleLogout = () => {
+		userStore.logout();
+		toastStore.success("تم تسجيل الخروج بنجاح");
+		router.push("/");
+	};
 
-			return {
-				route,
-				router,
-				userStore,
-				handleLogout,
-				handleLogoutMobile,
-				showSessionInfo,
-				formattedSessionTime,
-				mobileMenuOpen,
-				toggleMobileMenu,
-				closeMobileMenu,
-			};
-		},
+	const handleLogoutMobile = () => {
+		handleLogout();
+		closeMobileMenu();
+	};
+
+	// Toggle session info popup
+	const toggleSessionInfo = () => {
+		showSessionInfo.value = !showSessionInfo.value;
+	};
+
+	// Close session info when clicking outside
+	const handleClickOutside = (event) => {
+		const usernameBadge = document.getElementById("username-badge");
+		const sessionInfoElement = document.querySelector(".session-info");
+
+		if (
+			usernameBadge &&
+			sessionInfoElement &&
+			!usernameBadge.contains(event.target) &&
+			!sessionInfoElement.contains(event.target)
+		) {
+			showSessionInfo.value = false;
+		}
+	};
+
+	// Setup and cleanup event listeners
+	onMounted(() => {
+		document.addEventListener("click", handleClickOutside);
+	});
+
+	onUnmounted(() => {
+		document.removeEventListener("click", handleClickOutside);
 	});
 </script>
 

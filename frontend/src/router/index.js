@@ -4,40 +4,20 @@ import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import ServicesView from "@/views/ServicesView.vue";
 import HelpView from "@/views/HelpView.vue";
-import CategoryServicesView from "@/views/CategoryServiceView.vue"; // Import the new view
+import CategoryServicesView from "@/views/CategoryServiceView.vue";
 import ProviderManagementView from "@/views/ProviderManagementView.vue";
 import AdminDashboardView from "@/views/AdminDashboardView.vue";
-import ServiceDetailView from "@/views/ServiceDetailView.vue"; // Import the new view
+import ServiceDetailView from "@/views/ServiceDetailView.vue";
 import { useUserStore } from "@/store/userStore";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
-		{
-			path: "/",
-			name: "home",
-			component: HomeView,
-		},
-		{
-			path: "/login",
-			name: "login",
-			component: LoginView,
-		},
-		{
-			path: "/register",
-			name: "register",
-			component: RegisterView,
-		},
-		{
-			path: "/services",
-			name: "services",
-			component: ServicesView,
-		},
-		{
-			path: "/help",
-			name: "help",
-			component: HelpView,
-		},
+		{ path: "/", name: "home", component: HomeView },
+		{ path: "/login", name: "login", component: LoginView },
+		{ path: "/register", name: "register", component: RegisterView },
+		{ path: "/services", name: "services", component: ServicesView },
+		{ path: "/help", name: "help", component: HelpView },
 		{
 			path: "/category/:id",
 			name: "category",
@@ -68,34 +48,24 @@ const router = createRouter({
 // Navigation guard for protected routes
 router.beforeEach((to, from, next) => {
 	const userStore = useUserStore();
-
-	// Check token expiration on every navigation
 	userStore.checkTokenExpiration();
 
-	// Check if route requires authentication
 	if (to.matched.some((record) => record.meta.requiresAuth)) {
-		// Check if user is logged in
 		if (!userStore.isLoggedIn) {
-			next({ name: "login" });
-		} else if (to.meta.roles && to.meta.roles.length > 0) {
-			// Check if user has required role
+			return next({ name: "login" });
+		}
+
+		if (to.meta.roles?.length > 0) {
 			const hasRequiredRole = to.meta.roles.some((role) =>
 				userStore.hasRole(role)
 			);
 			if (!hasRequiredRole) {
-				// User doesn't have the required role, redirect to home
-				next({ name: "home" });
-			} else {
-				// User has the required role, proceed
-				next();
+				return next({ name: "home" });
 			}
-		} else {
-			// No role requirement, proceed
-			next();
 		}
-	} else {
-		next();
 	}
+
+	next();
 });
 
 export default router;

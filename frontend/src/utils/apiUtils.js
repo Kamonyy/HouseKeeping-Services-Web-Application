@@ -1,93 +1,127 @@
 /**
- * Handles different API response formats and extracts an array from them.
- * @param {any} responseData - The data received from an API call
- * @param {string} label - A label for logging purposes (e.g., 'categories', 'services')
- * @returns {Array} - The extracted array or an empty array if none is found
+ * Utility functions for working with API responses
+ */
+
+/**
+ * Extracts an array from different API response formats
+ * @param {any} responseData - API response data
+ * @param {string} label - Property name to look for (optional)
+ * @returns {Array} - Extracted array or empty array if not found
  */
 export const extractArrayFromResponse = (responseData, label = "items") => {
-	// Log the response for debugging
-	console.log(`${label} API response:`, responseData);
-
-	// If it's already an array, return it directly
+	// Already an array - return directly
 	if (Array.isArray(responseData)) {
 		return responseData;
 	}
 
-	// If it's an object, try to find an array inside it
+	// Handle object responses with different structures
 	if (responseData && typeof responseData === "object") {
-		// Try standard API response patterns
-		if (responseData.items && Array.isArray(responseData.items)) {
-			return responseData.items;
+		// Check for the specified property first
+		if (label && responseData[label] && Array.isArray(responseData[label])) {
+			return responseData[label];
 		}
 
-		if (responseData.data && Array.isArray(responseData.data)) {
-			return responseData.data;
+		// Try common property names used in API responses
+		for (const prop of ["items", "data", "results", "list"]) {
+			if (responseData[prop] && Array.isArray(responseData[prop])) {
+				return responseData[prop];
+			}
 		}
 
-		// Look for any property that contains an array
-		const possibleArrays = Object.values(responseData).filter((val) =>
+		// Look for any array property as last resort
+		const arrayProps = Object.values(responseData).filter((val) =>
 			Array.isArray(val)
 		);
-		if (possibleArrays.length > 0) {
-			return possibleArrays[0];
+		if (arrayProps.length > 0) {
+			return arrayProps[0];
 		}
-
-		// If we get here, we couldn't find an array in the response
-		console.warn(`Could not find ${label} array in API response`, responseData);
-	} else {
-		// Not an array or object
-		console.warn(`Unexpected API response format for ${label}`, responseData);
 	}
 
-	// Return empty array as fallback
 	return [];
 };
 
 /**
- * Extracts the token from different login response formats
- * @param {any} responseData - The data received from a login API call
- * @param {string} defaultUsername - The username to use if not found in the response
- * @returns {Object} - Object containing extracted username, token, firstName, and lastName
+ * Extracts auth data from login responses
+ * @param {any} responseData - Login API response
+ * @param {string} defaultUsername - Fallback username
+ * @returns {Object} - Auth information
  */
 export const extractAuthFromResponse = (responseData, defaultUsername) => {
-	let username = defaultUsername;
-	let token = null;
-	let firstName = "";
-	let lastName = "";
+	// Initialize with defaults
+	const auth = {
+		username: defaultUsername,
+		token: null,
+		firstName: "",
+		lastName: "",
+	};
 
+	// Handle string token response
 	if (typeof responseData === "string") {
-		// If the response is just a token string
-		token = responseData;
-	} else if (typeof responseData === "object") {
-		// If response is an object, extract token and username
-		token = responseData.token || responseData.accessToken || responseData.jwt;
-		username =
-			responseData.username || responseData.userName || defaultUsername;
-
-		// Extract first and last name with fallbacks for different case formats
-		firstName =
-			responseData.firstName ||
-			responseData.FirstName ||
-			responseData.firstname ||
-			responseData.first_name ||
-			"";
-
-		lastName =
-			responseData.lastName ||
-			responseData.LastName ||
-			responseData.lastname ||
-			responseData.last_name ||
-			"";
+		auth.token = responseData;
+		return auth;
 	}
 
-	return { username, token, firstName, lastName };
+	// Handle object response
+	if (responseData && typeof responseData === "object") {
+		// Extract token
+		auth.token =
+			responseData.token ||
+			responseData.accessToken ||
+			responseData.jwt ||
+			responseData.idToken ||
+			null;
+
+		// Extract username
+		auth.username =
+			responseData.username ||
+			responseData.userName ||
+			responseData.user?.username ||
+			defaultUsername;
+
+		// Extract name fields using common naming variations
+		const nameVariants = {
+			first: [
+				"firstName",
+				"FirstName",
+				"firstname",
+				"first_name",
+				"given_name",
+			],
+			last: [
+				"lastName",
+				"LastName",
+				"lastname",
+				"last_name",
+				"family_name",
+				"surname",
+			],
+		};
+
+		// Find first name match
+		for (const field of nameVariants.first) {
+			if (responseData[field]) {
+				auth.firstName = responseData[field];
+				break;
+			}
+		}
+
+		// Find last name match
+		for (const field of nameVariants.last) {
+			if (responseData[field]) {
+				auth.lastName = responseData[field];
+				break;
+			}
+		}
+	}
+
+	return auth;
 };
 
 /**
- * Normalizes the property names in an array of objects to ensure consistent casing
- * @param {Array} items - The array of objects to normalize
- * @param {Object} propertyMap - Map of property names: { originalName: normalizedName }
- * @returns {Array} - The normalized array of objects
+ * Normalizes property names in objects for consistent access
+ * @param {Array} items - Array of objects to normalize
+ * @param {Object} propertyMap - Mapping of original to normalized names
+ * @returns {Array} - Normalized objects
  */
 export const normalizePropertyNames = (items, propertyMap) => {
 	if (!Array.isArray(items)) return [];
@@ -95,15 +129,49 @@ export const normalizePropertyNames = (items, propertyMap) => {
 	return items.map((item) => {
 		const normalized = { ...item };
 
-		Object.entries(propertyMap).forEach(([original, normalized]) => {
-			// If the normalized property doesn't exist but the original does
-			if (item[original] !== undefined && item[normalized] === undefined) {
-				normalized[normalized] = item[original];
+		// Copy values from original properties to normalized names
+		for (const [original, normalizedName] of Object.entries(propertyMap)) {
+			if (
+				item[original] !== undefined &&
+				normalized[normalizedName] === undefined
+			) {
+				normalized[normalizedName] = item[original];
 			}
-		});
+		}
 
 		return normalized;
 	});
+};
+
+/**
+ * Finds a category by ID in an array of categories
+ * @param {Array} categories - Array of category objects
+ * @param {string|number} id - ID to find
+ * @returns {Object|null} - Found category or null
+ */
+export const findCategoryById = (categories, id) => {
+	if (!categories?.length || !id) return null;
+
+	const targetId = String(id);
+	return (
+		categories.find((cat) => String(cat.id || cat.Id) === targetId) || null
+	);
+};
+
+/**
+ * Safely parses JSON without throwing errors
+ * @param {string} text - JSON text to parse
+ * @param {any} fallback - Default value if parsing fails
+ * @returns {any} - Parsed object or fallback
+ */
+export const safeJsonParse = (text, fallback = null) => {
+	if (!text) return fallback;
+
+	try {
+		return JSON.parse(text);
+	} catch (err) {
+		return fallback;
+	}
 };
 
 /**

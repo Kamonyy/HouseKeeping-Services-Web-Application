@@ -56,7 +56,6 @@
 			if (categoriesArray && categoriesArray.length > 0) {
 				categories.value = categoriesArray.slice(0, 4);
 			} else {
-				console.warn("No categories returned from API, using fallback data");
 				categories.value = fallbackCategories;
 			}
 		} catch (error) {
@@ -143,23 +142,15 @@
 		},
 	];
 
-	// Ensure animations start fully opaque on mobile and after a timeout
+	// Optimized animation setup function
 	const setupScrollAnimation = () => {
-		// First ensure all animations are properly reset
 		const animatedElements = document.querySelectorAll(".scroll-animate");
-
-		console.log(
-			`Setting up scroll animations for ${animatedElements.length} elements`
-		);
-
-		// Make sure elements are visible by default on small screens and for users with reduced motion
-		if (
+		const shouldSkipAnimation =
 			window.matchMedia("(max-width: 768px)").matches ||
-			window.matchMedia("(prefers-reduced-motion: reduce)").matches
-		) {
-			console.log(
-				"Small screen or reduced motion detected, showing all elements immediately"
-			);
+			window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+		// Skip animations on small screens or when reduced motion is preferred
+		if (shouldSkipAnimation) {
 			animatedElements.forEach((element) => {
 				element.style.opacity = "1";
 				element.style.transform = "none";
@@ -168,23 +159,19 @@
 			return;
 		}
 
-		// Create and configure Intersection Observer with a more sensitive threshold
+		// Create and configure Intersection Observer
 		const observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						console.log(
-							`Element entering viewport, animating:`,
-							entry.target.className
-						);
 						// Add a small random delay for a more natural effect
 						const delay = Math.random() * 0.3;
 						entry.target.style.transitionDelay = `${delay}s`;
 
-						// Add the animated class which will trigger the CSS transition
-						setTimeout(() => {
+						// Add the animated class
+						requestAnimationFrame(() => {
 							entry.target.classList.add("animated");
-						}, 50); // Small timeout to ensure the delay is applied
+						});
 
 						// Stop observing after animation
 						observer.unobserve(entry.target);
@@ -192,21 +179,13 @@
 				});
 			},
 			{
-				root: null,
-				threshold: 0.1, // More sensitive threshold - only need 10% visibility
-				rootMargin: "0px 0px -50px 0px", // Trigger slightly before the element is fully in view
+				threshold: 0.1,
+				rootMargin: "0px 0px -50px 0px",
 			}
 		);
 
-		// Apply observer to all animated elements
-		animatedElements.forEach((element) => {
-			// Reset animation state first to ensure clean animations
-			element.classList.remove("animated");
-			observer.observe(element);
-		});
-
-		// Setup testimonial animations
-		setupTestimonialAnimations();
+		// Start observing each element
+		animatedElements.forEach((element) => observer.observe(element));
 	};
 
 	// Special animations for testimonials

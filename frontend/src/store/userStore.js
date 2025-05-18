@@ -3,11 +3,11 @@ import { jwtDecode } from "jwt-decode";
 
 // Token expiration time in milliseconds (default: 24 hours)
 const TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+const USER_STORAGE_KEY = "user";
 
 export const useUserStore = defineStore("user", {
 	state: () => {
-		// Try to load user data from localStorage
-		const storedUser = localStorage.getItem("user");
+		// Initialize with default state
 		const initialState = {
 			username: null,
 			firstName: null,
@@ -17,24 +17,25 @@ export const useUserStore = defineStore("user", {
 			tokenExpiration: null,
 		};
 
-		if (storedUser) {
-			try {
+		// Try to load user data from localStorage
+		try {
+			const storedUser = localStorage.getItem(USER_STORAGE_KEY);
+			if (storedUser) {
 				const parsedUser = JSON.parse(storedUser);
 
-				// Check if token hasn't expired
+				// Check if token is still valid
 				if (
 					parsedUser.tokenExpiration &&
 					new Date(parsedUser.tokenExpiration) > new Date()
 				) {
 					return parsedUser;
-				} else {
-					// Token expired, remove from localStorage
-					localStorage.removeItem("user");
 				}
-			} catch (e) {
-				console.error("Error parsing stored user data:", e);
-				localStorage.removeItem("user");
+
+				// Clear expired token
+				localStorage.removeItem(USER_STORAGE_KEY);
 			}
+		} catch (e) {
+			localStorage.removeItem(USER_STORAGE_KEY);
 		}
 
 		return initialState;
@@ -47,8 +48,7 @@ export const useUserStore = defineStore("user", {
 			this.lastName = lastName;
 
 			// Set token expiration date
-			const expirationDate = new Date();
-			expirationDate.setTime(expirationDate.getTime() + TOKEN_EXPIRATION_TIME);
+			const expirationDate = new Date(Date.now() + TOKEN_EXPIRATION_TIME);
 			this.tokenExpiration = expirationDate.toISOString();
 
 			// Extract roles from the token
@@ -60,18 +60,18 @@ export const useUserStore = defineStore("user", {
 							"http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
 						];
 					this.roles = Array.isArray(rolesClaim) ? rolesClaim : [rolesClaim];
-
-					// Store in localStorage if rememberMe is true
-					if (rememberMe) {
-						this.persistUserData();
-					}
 				} catch (error) {
-					console.error("Error extracting roles from token:", error);
 					this.roles = [];
+				}
+
+				// Store in localStorage if rememberMe is true
+				if (rememberMe) {
+					this.persistUserData();
 				}
 			}
 		},
 		logout() {
+			// Reset state
 			this.username = null;
 			this.firstName = null;
 			this.lastName = null;
@@ -80,14 +80,14 @@ export const useUserStore = defineStore("user", {
 			this.tokenExpiration = null;
 
 			// Clear localStorage
-			localStorage.removeItem("user");
+			localStorage.removeItem(USER_STORAGE_KEY);
 		},
 		hasRole(role) {
 			return this.roles.includes(role);
 		},
 		persistUserData() {
 			localStorage.setItem(
-				"user",
+				USER_STORAGE_KEY,
 				JSON.stringify({
 					username: this.username,
 					firstName: this.firstName,
@@ -99,43 +99,31 @@ export const useUserStore = defineStore("user", {
 			);
 		},
 		checkTokenExpiration() {
-			if (this.tokenExpiration) {
-				const now = new Date();
-				const expiration = new Date(this.tokenExpiration);
+			if (!this.tokenExpiration) return false;
 
-				// If token is expired, log out
-				if (now >= expiration) {
-					this.logout();
-					return false;
-				}
-				return true;
+			const now = new Date();
+			const expiration = new Date(this.tokenExpiration);
+
+			if (now >= expiration) {
+				this.logout();
+				return false;
 			}
-			return false;
+
+			return true;
 		},
 	},
 	getters: {
 		isLoggedIn: (state) => {
 			if (!state.token || !state.tokenExpiration) return false;
-
-			// Check if token is expired
-			const now = new Date();
-			const expiration = new Date(state.tokenExpiration);
-			return now < expiration;
+			return new Date() < new Date(state.tokenExpiration);
 		},
 		isAdmin: (state) => state.roles.includes("Admin"),
 		isProvider: (state) => state.roles.includes("Provider"),
 		isUser: (state) => state.roles.includes("User"),
-		// Return time left before token expiration
 		tokenExpiresIn: (state) => {
 			if (!state.tokenExpiration) return 0;
-
-			const now = new Date();
-			const expiration = new Date(state.tokenExpiration);
-			return Math.max(0, expiration - now);
+			return Math.max(0, new Date(state.tokenExpiration) - new Date());
 		},
-		// Return display name (firstName or username)
-		displayName: (state) => {
-			return state.firstName || state.username;
-		},
+		displayName: (state) => state.firstName || state.username,
 	},
 });
