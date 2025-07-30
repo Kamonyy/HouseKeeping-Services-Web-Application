@@ -1,40 +1,83 @@
 # HouseKeeping Web Application
 
-A modern platform for managing, booking, and providing housekeeping and home services. Built with ASP.NET Core 8 (C#) for the backend and Vue 3 for the frontend, HouseKeeping Web Application streamlines service management for providers, administrators, and customers.
+[![.NET](https://img.shields.io/badge/.NET-8.0-blue.svg)](https://dotnet.microsoft.com/download)
+[![Vue.js](https://img.shields.io/badge/Vue.js-3.0-green.svg)](https://vuejs.org/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg)](https://www.mysql.com/)
+
+A full-stack web application for managing housekeeping and home services. Built with ASP.NET Core 8 and Vue 3, featuring user authentication, role-based access control, and comprehensive service management capabilities.
 
 ## Features
 
-- **Service Management:** Create, update, and categorize housekeeping and home services.
-- **User Authentication:** Secure login and registration with JWT-based authentication.
-- **Provider Dashboard:** Manage offered services, view bookings, and handle customer feedback.
-- **Admin Dashboard:** Oversee users, services, categories, and generate reports/statistics.
-- **Booking System:** Customers can browse, book, and review services.
-- **Comments & Ratings:** Users can leave feedback and rate services.
-- **Responsive UI:** Modern, mobile-friendly interface built with Vue 3.
-- **Role-Based Access:** Separate interfaces and permissions for admins, providers, and customers.
+- **Authentication & Authorization**: JWT-based authentication with role-based access control
+- **Multi-Role System**: Admin, Service Provider, and Customer interfaces
+- **Service Management**: Create, update, and categorize housekeeping services
+- **Admin Dashboard**: User management, service oversight, and analytics
+- **Provider Portal**: Service management and customer interaction tools
+- **Responsive Design**: Mobile-friendly interface with modern UI/UX
 
 ## Tech Stack
 
-- **Backend:** ASP.NET Core 8, Entity Framework Core, MySQL, Identity, JWT
-- **Frontend:** Vue 3, Pinia, Vue Router
-- **API Documentation:** Swagger/OpenAPI
+### Backend
+
+- ASP.NET Core 8.0
+- Entity Framework Core with MySQL
+- JWT Authentication with Identity
+- AutoMapper for object mapping
+- Swagger/OpenAPI documentation
+
+### Frontend
+
+- Vue 3 with Composition API
+- Pinia for state management
+- Vue Router 4
+- Axios for HTTP requests
+- Tailwind CSS for styling
+
+## Project Structure
+
+```
+HouseKeeping/
+├── api/HousekeepingAPI/     # ASP.NET Core backend
+│   ├── Controllers/         # API endpoints
+│   ├── Models/             # Entity models
+│   ├── Repository/         # Data access layer
+│   └── Service/            # Business logic
+├── frontend/               # Vue 3 frontend
+│   └── src/
+│       ├── components/     # Vue components
+│       ├── views/          # Page components
+│       ├── store/          # Pinia stores
+│       └── services/       # API services
+└── README.md
+```
 
 ## Getting Started
 
 ### Prerequisites
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download)
-- [Node.js & npm](https://nodejs.org/)
-- [MySQL](https://www.mysql.com/)
+- .NET 8 SDK
+- Node.js 18+
+- MySQL 8.0+
 
 ### Backend Setup
 
 1. Navigate to the API directory:
+
    ```bash
    cd api/HousekeepingAPI
    ```
-2. Configure your database connection in `appsettings.json`.
-3. Run migrations and start the API:
+
+2. Configure database connection in `appsettings.json`:
+
+   ```json
+   {
+   	"ConnectionStrings": {
+   		"DefaultConnection": "Server=localhost;Database=HouseKeepingDB;Uid=root;Pwd=your_password;"
+   	}
+   }
+   ```
+
+3. Run migrations and start the server:
    ```bash
    dotnet ef database update
    dotnet run
@@ -43,23 +86,50 @@ A modern platform for managing, booking, and providing housekeeping and home ser
 ### Frontend Setup
 
 1. Navigate to the frontend directory:
+
    ```bash
    cd frontend
    ```
-2. Install dependencies:
+
+2. Install dependencies and start development server:
    ```bash
    npm install
-   ```
-3. Start the development server:
-   ```bash
    npm run dev
    ```
 
 ### API Documentation
 
-- Visit `/swagger` on the backend server for interactive API docs.
+- Swagger UI available at `/swagger` on the backend server
 
-## Folder Structure
+## Development
 
-- `api/HousekeepingAPI/` - ASP.NET Core backend
-- `frontend/` - Vue 3 frontend
+### Database Migrations
+
+```bash
+dotnet ef migrations add MigrationName
+dotnet ef database update
+```
+
+### Production Build
+
+```bash
+# Backend
+dotnet publish -c Release
+
+# Frontend
+npm run build
+```
+
+## Key Technical Achievements
+
+- RESTful API design with proper HTTP status codes
+- Secure authentication and authorization implementation
+- Database design with proper relationships and constraints
+- Component-based architecture with reusable Vue components
+- Responsive design with mobile-first approach
+- Error handling and user feedback systems
+- Clean code architecture following best practices
+
+---
+
+_Built with ASP.NET Core 8 and Vue 3_
