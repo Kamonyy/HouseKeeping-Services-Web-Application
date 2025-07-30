@@ -1,98 +1,135 @@
-# Hi there, I'm Mohamed Hussein 👋
+# HouseKeeping Services Web Application
 
-## Software Developer | Full-Stack | ASP.NET Core | Vue.js
+[![.NET](https://img.shields.io/badge/.NET-8.0-blue.svg)](https://dotnet.microsoft.com/download)
+[![Vue.js](https://img.shields.io/badge/Vue.js-3.0-green.svg)](https://vuejs.org/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg)](https://www.mysql.com/)
 
-**📍 Baghdad, Iraq** | **📧 hmohamad181@gmail.com** | **📱 +964-771-121-1558**
+A full-stack web application for managing housekeeping and home services. Built with ASP.NET Core 8 and Vue 3, featuring user authentication, role-based access control, and comprehensive service management capabilities.
 
-I'm a Computer Science graduate passionate about building reliable, efficient web applications. Currently focused on full-stack development with modern technologies and clean architecture principles.
+## Features
 
-### 🎓 Education
+- **Authentication & Authorization**: JWT-based authentication with role-based access control
+- **Multi-Role System**: Admin, Service Provider, and Customer interfaces
+- **Service Management**: Create, update, and categorize housekeeping services
+- **Admin Dashboard**: User management, service oversight, and analytics
+- **Provider Portal**: Service management and customer interaction tools
+- **Responsive Design**: Mobile-friendly interface with modern UI/UX
 
-**Bachelor's in Computer Science** (2022 - 2025)  
-_Al-Nahrain University_
+## Tech Stack
 
-### 💼 Professional Experience
+### Backend
 
-**Software Intern** - ASAS (Asiacell) | _Feb 2024 - May 2024_
+- ASP.NET Core 8.0
+- Entity Framework Core with MySQL
+- JWT Authentication with Identity
+- AutoMapper for object mapping
+- Swagger/OpenAPI documentation
 
-- Gained hands-on experience in telecom software systems
-- Worked with backend development in a professional environment
-- Participated in team-based projects
+### Frontend
 
-**Back-End Developer** - Vitex | _Feb 2023 - May 2023_
+- Vue 3 with Composition API
+- Pinia for state management
+- Vue Router 4
+- Axios for HTTP requests
+- Tailwind CSS for styling
 
-- Developed and maintained backend services for freelance projects
-- Collaborated with senior developers to enhance technical proficiency
-- Contributed to project delivery within tight deadlines
+## Project Structure
 
-### 🛠️ Tech Stack
+```
+HouseKeeping/
+├── api/HousekeepingAPI/     # ASP.NET Core backend
+│   ├── Controllers/         # API endpoints
+│   ├── Models/             # Entity models
+│   ├── Repository/         # Data access layer
+│   └── Service/            # Business logic
+├── frontend/               # Vue 3 frontend
+│   └── src/
+│       ├── components/     # Vue components
+│       ├── views/          # Page components
+│       ├── store/          # Pinia stores
+│       └── services/       # API services
+└── README.md
+```
 
-**Backend:**
+## Getting Started
 
-- ASP.NET Core 8
-- Entity Framework Core
-- MySQL
-- JWT Authentication
-- RESTful APIs
+### Prerequisites
 
-**Frontend:**
+- .NET 8 SDK
+- Node.js 18+
+- MySQL 8.0+
 
-- Vue.js 3
-- Nuxt.js
-- React.js
-- Next.js
-- Pinia (State Management)
-- Vue Router
+### Backend Setup
 
-**Languages & Tools:**
+1. Navigate to the API directory:
 
-- C#, JavaScript, HTML, CSS
-- Node.js
-- Git & GitHub
-- Swagger/OpenAPI
-- Visual Studio / VS Code
+   ```bash
+   cd api/HousekeepingAPI
+   ```
 
-### 🚀 Featured Project
+2. Configure database connection in `appsettings.json`:
 
-**[HouseKeeping Services Web Application](https://github.com/Kamonyy/HouseKeeping-Services-Web-Application)**
+   ```json
+   {
+   	"ConnectionStrings": {
+   		"DefaultConnection": "Server=localhost;Database=HouseKeepingDB;Uid=root;Pwd=your_password;"
+   	}
+   }
+   ```
 
-My graduation project - A comprehensive full-stack web application for managing housekeeping and home services, featuring:
+3. Run migrations and start the server:
+   ```bash
+   dotnet ef database update
+   dotnet run
+   ```
 
-- **Multi-role authentication system** (Admin, Provider, Customer)
-- **Comprehensive service management** with booking capabilities
-- **Real-time updates** and responsive design
-- **Secure API** with JWT authentication
-- **Admin dashboard** with analytics and user management
+### Frontend Setup
 
-_Built with ASP.NET Core 8, Vue.js 3, and MySQL_
+1. Navigate to the frontend directory:
 
-### 📊 GitHub Stats
+   ```bash
+   cd frontend
+   ```
 
-![Your GitHub stats](https://github-readme-stats.vercel.app/api?username=Kamonyy&show_icons=true&theme=radical)
+2. Install dependencies and start development server:
+   ```bash
+   npm install
+   npm run dev
+   ```
 
-### 🔗 Connect With Me
+### API Documentation
 
-- **LinkedIn:** [Mohamed Hussein](https://linkedin.com/in/mohamedhussein00/)
-- **GitHub:** [@Kamonyy](https://github.com/Kamonyy)
-- **Email:** hmohamad181@gmail.com
+- Swagger UI available at `/swagger` on the backend server
 
-### 🌟 Additional Projects
+## Development
 
-- **Student Management System** - C# and MySQL project
-- Various freelance projects with Vitex team
+### Database Migrations
 
-### 📈 Current Focus
+```bash
+dotnet ef migrations add MigrationName
+dotnet ef database update
+```
 
-- Expanding full-stack development skills
-- Learning cloud deployment (Azure/AWS)
-- Contributing to open-source projects
-- Building scalable web applications
+### Production Build
 
-### 🌍 Languages
+```bash
+# Backend
+dotnet publish -c Release
 
-- **Arabic:** Native
-- **English:** Fluent
+# Frontend
+npm run build
+```
+
+## Key Technical Achievements
+
+- RESTful API design with proper HTTP status codes
+- Secure authentication and authorization implementation
+- Database design with proper relationships and constraints
+- Component-based architecture with reusable Vue components
+- Responsive design with mobile-first approach
+- Error handling and user feedback systems
+- Clean code architecture following best practices
 
 ---
 
-_Always learning, always building_ 🚀
+_Built with ASP.NET Core 8 and Vue 3_
