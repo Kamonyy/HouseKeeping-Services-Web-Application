@@ -1,4 +1,4 @@
-# HouseKeeping Web Application
+# HouseKeeping Services Web Application
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-blue.svg)](https://dotnet.microsoft.com/download)
 [![Vue.js](https://img.shields.io/badge/Vue.js-3.0-green.svg)](https://vuejs.org/)
