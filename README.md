@@ -59,6 +59,33 @@ HouseKeeping/
 - Node.js 18+
 - MySQL 8.0+
 
+### Environment Setup
+
+#### Backend Configuration
+
+1. Navigate to `api/HousekeepingAPI/`
+2. Update `appsettings.json` with your database credentials:
+   ```json
+   {
+   	"ConnectionStrings": {
+   		"DefaultConnection": "server=localhost;user=your_username;password=your_password;database=housekeepingdb"
+   	},
+   	"JWT": {
+   		"Issuer": "http://localhost:5146",
+   		"Audience": "http://localhost:5146",
+   		"SigningKey": "your_jwt_signing_key_here_make_it_long_and_secure"
+   	}
+   }
+   ```
+
+#### Frontend Configuration
+
+1. Navigate to `frontend/`
+2. Create a `.env` file with your API URL:
+   ```
+   VITE_API_URL=http://localhost:7001
+   ```
+
 ### Backend Setup
 
 1. Navigate to the API directory:
@@ -67,17 +94,7 @@ HouseKeeping/
    cd api/HousekeepingAPI
    ```
 
-2. Configure database connection in `appsettings.json`:
-
-   ```json
-   {
-   	"ConnectionStrings": {
-   		"DefaultConnection": "Server=localhost;Database=HouseKeepingDB;Uid=root;Pwd=your_password;"
-   	}
-   }
-   ```
-
-3. Run migrations and start the server:
+2. Run migrations and start the server:
    ```bash
    dotnet ef database update
    dotnet run

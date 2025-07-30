@@ -38,6 +38,11 @@ api/HousekeepingAPI/obj/HousekeepingAPI.csproj.nuget.g.props
 api/HousekeepingAPI/obj/project.assets.json
 api/HousekeepingAPI/obj/project.nuget.cache
 
+# Build outputs - comprehensive ignore
+api/HousekeepingAPI/bin/
+api/HousekeepingAPI/obj/
+api/HousekeepingAPI/.vs/
+
 # Sensitive Configuration Files
 api/HousekeepingAPI/appsettings.Development.json
 api/HousekeepingAPI/appsettings.Production.json
