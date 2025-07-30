@@ -1,3 +1,4 @@
+# .NET
 api/.vs/HousekeepingAPI/DesignTimeBuild/.dtbcache.v2
 api/.vs/HousekeepingAPI/FileContentIndex/1d73cd7b-50ce-4ec3-b81a-602320aa8208.vsidx
 api/.vs/HousekeepingAPI/FileContentIndex/247ef653-3b01-40ad-98df-a43f11c7d63e.vsidx
@@ -36,4 +37,69 @@ api/HousekeepingAPI/obj/HousekeepingAPI.csproj.nuget.dgspec.json
 api/HousekeepingAPI/obj/HousekeepingAPI.csproj.nuget.g.props
 api/HousekeepingAPI/obj/project.assets.json
 api/HousekeepingAPI/obj/project.nuget.cache
-api/HousekeepingAPI/Program.cs
+
+# Sensitive Configuration Files
+api/HousekeepingAPI/appsettings.Development.json
+api/HousekeepingAPI/appsettings.Production.json
+api/HousekeepingAPI/appsettings.Local.json
+api/HousekeepingAPI/appsettings.*.json
+!api/HousekeepingAPI/appsettings.json
+
+# Environment Variables
+.env
+.env.local
+.env.development
+.env.production
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+frontend/dist/
+frontend/build/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
