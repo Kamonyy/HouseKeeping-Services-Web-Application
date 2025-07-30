@@ -1,4 +1,4 @@
-# HouseKeeping Web Application
+# HouseKeeping Services Web Application
 
 A modern platform for managing, booking, and providing housekeeping and home services. Built with ASP.NET Core 8 (C#) for the backend and Vue 3 for the frontend, HouseKeeping Web Application streamlines service management for providers, administrators, and customers.
 
